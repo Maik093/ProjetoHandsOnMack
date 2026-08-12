@@ -1,4 +1,4 @@
-# ProjetoHandsOnFormula1
+# Projeto Hands On Formula 1
 Repositório para entrega do projeto de hands on do MBA de Engenharia de Dados do Mackenzie.
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
