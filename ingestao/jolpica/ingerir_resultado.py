@@ -9,10 +9,10 @@ import requests
 # CONFIGURAÇÕES
 # ==================================================
 
-TEMPORADA = 2024
-ROUND = 21
+ANO_INICIAL = 2015
+ANO_FINAL = 2025
 
-URL = f"https://api.jolpi.ca/ergast/f1/{TEMPORADA}/{ROUND}/results/"
+CIRCUITO = "interlagos"
 
 HEADERS = {
     "User-Agent": "F1DataEngineering/1.0"
@@ -24,39 +24,9 @@ MINIO_SECRET_KEY = "minioadmin123"
 
 BUCKET = "f1-data-lake"
 
-CAMINHO_ARQUIVO = (
-    f"bronze/jolpica/resultados/{TEMPORADA}/"
-    f"round_{ROUND}/resultados.json"
-)
-
 
 # ==================================================
-# 1. CONSUMIR JOLPICA
-# ==================================================
-
-response = requests.get(
-    URL,
-    headers=HEADERS,
-    timeout=30
-)
-
-response.raise_for_status()
-
-dados = response.json()
-
-corrida = dados["MRData"]["RaceTable"]["Races"][0]
-
-resultados = corrida["Results"]
-
-print("API consultada com sucesso!")
-print(f"Temporada: {TEMPORADA}")
-print(f"Round: {ROUND}")
-print(f"Corrida: {corrida['raceName']}")
-print(f"Quantidade de resultados: {len(resultados)}")
-
-
-# ==================================================
-# 2. CONECTAR AO MINIO
+# CONECTAR AO MINIO
 # ==================================================
 
 cliente_minio = boto3.client(
@@ -71,26 +41,178 @@ print("Conexão com o MinIO estabelecida!")
 
 
 # ==================================================
-# 3. CONVERTER JSON PARA BYTES
+# PERCORRER AS TEMPORADAS
 # ==================================================
 
-conteudo = json.dumps(
-    dados,
-    ensure_ascii=False,
-    indent=2
-).encode("utf-8")
+for temporada in range(ANO_INICIAL, ANO_FINAL + 1):
+
+    print()
+    print("=" * 60)
+    print(f"Processando resultado: {temporada}")
+    print("=" * 60)
 
 
-# ==================================================
-# 4. SALVAR NA BRONZE
-# ==================================================
+    try:
 
-cliente_minio.put_object(
-    Bucket=BUCKET,
-    Key=CAMINHO_ARQUIVO,
-    Body=BytesIO(conteudo),
-    ContentType="application/json"
-)
+        # ==================================================
+        # 1. BUSCAR CALENDÁRIO
+        # ==================================================
 
-print("Resultados salvos no MinIO com sucesso!")
-print(f"Local: {CAMINHO_ARQUIVO}")
+        URL_CALENDARIO = (
+            f"https://api.jolpi.ca/ergast/f1/"
+            f"{temporada}/races/"
+        )
+
+        response = requests.get(
+            URL_CALENDARIO,
+            headers=HEADERS,
+            timeout=30
+        )
+
+        response.raise_for_status()
+
+        dados_calendario = response.json()
+
+        corridas = (
+            dados_calendario["MRData"]
+            ["RaceTable"]
+            ["Races"]
+        )
+
+
+        # ==================================================
+        # 2. ENCONTRAR INTERLAGOS
+        # ==================================================
+
+        interlagos = [
+            corrida
+            for corrida in corridas
+            if corrida.get("Circuit", {}).get("circuitId")
+            == CIRCUITO
+        ]
+
+
+        if not interlagos:
+
+            print(
+                f"Interlagos não encontrado "
+                f"em {temporada}."
+            )
+
+            continue
+
+
+        corrida_calendario = interlagos[0]
+
+        round_interlagos = corrida_calendario["round"]
+
+
+        print(
+            f"Interlagos encontrado - "
+            f"Round {round_interlagos}"
+        )
+
+
+        # ==================================================
+        # 3. BUSCAR RESULTADOS
+        # ==================================================
+
+        URL_RESULTADOS = (
+            f"https://api.jolpi.ca/ergast/f1/"
+            f"{temporada}/{round_interlagos}/results/"
+        )
+
+        response = requests.get(
+            URL_RESULTADOS,
+            headers=HEADERS,
+            timeout=30
+        )
+
+        response.raise_for_status()
+
+        dados = response.json()
+
+
+        # ==================================================
+        # 4. EXTRAIR CORRIDA
+        # ==================================================
+
+        races = (
+            dados.get("MRData", {})
+            .get("RaceTable", {})
+            .get("Races", [])
+        )
+
+
+        if not races:
+
+            print(
+                f"Sem resultados para "
+                f"{temporada}."
+            )
+
+            continue
+
+
+        corrida = races[0]
+
+        resultados = corrida.get(
+            "Results",
+            []
+        )
+
+
+        print(
+            f"Corrida: {corrida['raceName']}"
+        )
+
+        print(
+            f"Quantidade de resultados: "
+            f"{len(resultados)}"
+        )
+
+
+        # ==================================================
+        # 5. SALVAR NO MINIO
+        # ==================================================
+
+        caminho = (
+            f"bronze/jolpica/resultados/"
+            f"{temporada}/interlagos/"
+            f"resultados.json"
+        )
+
+
+        conteudo = json.dumps(
+            dados,
+            ensure_ascii=False,
+            indent=2
+        ).encode("utf-8")
+
+
+        cliente_minio.put_object(
+            Bucket=BUCKET,
+            Key=caminho,
+            Body=BytesIO(conteudo),
+            ContentType="application/json"
+        )
+
+
+        print(
+            f"Resultados {temporada} "
+            "salvos no MinIO!"
+        )
+
+
+    except Exception as erro:
+
+        print(
+            f"Erro ao processar {temporada}: "
+            f"{erro}"
+        )
+
+
+print()
+print("=" * 60)
+print("INGESTÃO DOS RESULTADOS CONCLUÍDA!")
+print("=" * 60)
