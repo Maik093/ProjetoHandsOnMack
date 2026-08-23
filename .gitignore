@@ -38,13 +38,9 @@ Thumbs.db
 *.pem
 *.key
 
-# MinIO - dados locais e metadados
-dados/minio/
-
 # Arquivos temporários do Excel
 ~$*.xlsx
 ~$*.xls
-
 
 # FastF1
 cache_fastf1/
