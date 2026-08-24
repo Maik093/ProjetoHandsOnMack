@@ -1,3 +1,6 @@
+# MinIO - metadados internos
+dados/minio/.minio.sys/
+
 # Ambiente virtual
 .venv/
 venv/

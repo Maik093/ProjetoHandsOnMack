@@ -1,0 +1,5 @@
+boto3
+requests
+fastf1
+duckdb
+pyarrow
