@@ -22,9 +22,15 @@ O objetivo é compreender, com base em dados, quais fatores diferenciam as equip
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Descrever detalhadamente o problema
-???????????????????????????????????
+A Fórmula 1 é uma competição caracterizada por elevada complexidade e por margens reduzidas de desempenho entre pilotos e equipes. O resultado de uma corrida é influenciado por diversos fatores que ocorrem antes e durante a prova, como posição de largada, ritmo de corrida, estratégia adotada, condições climáticas, desgaste dos pneus, paradas nos boxes e eventos inesperados na pista.
 
+No Grande Prêmio de São Paulo, realizado no Autódromo de Interlagos, essa complexidade é potencializada pelas características do circuito e pela possibilidade de variações nas condições de corrida. Como consequência, decisões tomadas ao longo de um fim de semana podem produzir impactos significativos no desempenho e na posição final de um piloto.
+
+Nesse contexto, Gabriel Bortoleto enfrenta o desafio de competir em um cenário no qual seu desempenho não depende apenas de sua capacidade individual, mas também da combinação de diferentes fatores relacionados à corrida, ao ambiente e à estratégia da equipe.
+
+Entretanto, analisar isoladamente indicadores como posição de largada, tempo de volta ou resultado final não permite compreender adequadamente quais fatores possuem maior relação com um bom desempenho em Interlagos. A interação entre essas variáveis torna difícil identificar quais condições historicamente favoreceram ganhos ou perdas de desempenho durante a prova.
+
+Dessa forma, o problema central deste projeto está na dificuldade de compreender quais fatores possuem maior influência sobre o desempenho de um piloto no Grande Prêmio de São Paulo e como a combinação desses fatores pode afetar a competitividade de Gabriel Bortoleto em Interlagos.
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Coleta dos dados
