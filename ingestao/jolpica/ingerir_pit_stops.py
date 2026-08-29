@@ -51,7 +51,6 @@ for temporada in range(ANO_INICIAL, ANO_FINAL + 1):
     print(f"Processando pit stops: {temporada}")
     print("=" * 60)
 
-
     try:
 
         # ==================================================
@@ -79,7 +78,6 @@ for temporada in range(ANO_INICIAL, ANO_FINAL + 1):
             ["Races"]
         )
 
-
         # ==================================================
         # 2. ENCONTRAR INTERLAGOS
         # ==================================================
@@ -91,7 +89,6 @@ for temporada in range(ANO_INICIAL, ANO_FINAL + 1):
             == CIRCUITO
         ]
 
-
         if not interlagos:
 
             print(
@@ -101,74 +98,102 @@ for temporada in range(ANO_INICIAL, ANO_FINAL + 1):
 
             continue
 
-
         round_interlagos = interlagos[0]["round"]
-
 
         print(
             f"Interlagos encontrado - "
             f"Round {round_interlagos}"
         )
 
-
         # ==================================================
-        # 3. BUSCAR PIT STOPS
-        # ==================================================
-
-        URL = (
-            f"https://api.jolpi.ca/ergast/f1/"
-            f"{temporada}/{round_interlagos}/pitstops/"
-        )
-
-        response = requests.get(
-            URL,
-            headers=HEADERS,
-            timeout=30
-        )
-
-        response.raise_for_status()
-
-        dados = response.json()
-
-
-        # ==================================================
-        # 4. EXTRAIR CORRIDA
+        # 3. BUSCAR TODOS OS PIT STOPS
         # ==================================================
 
-        races = (
-            dados.get("MRData", {})
-            .get("RaceTable", {})
-            .get("Races", [])
-        )
+        limit = 100
+        offset = 0
 
+        todos_pit_stops = []
+        dados_primeira_requisicao = None
 
-        if not races:
+        while True:
 
-            print(
-                f"Sem dados de pit stops "
-                f"para {temporada}."
+            URL = (
+                f"https://api.jolpi.ca/ergast/f1/"
+                f"{temporada}/{round_interlagos}/pitstops/"
+                f"?limit={limit}&offset={offset}"
             )
 
-            continue
+            response = requests.get(
+                URL,
+                headers=HEADERS,
+                timeout=30
+            )
 
+            response.raise_for_status()
 
-        corrida = races[0]
+            dados = response.json()
 
-        pit_stops = corrida.get(
-            "PitStops",
-            []
-        )
+            # Guarda a estrutura original da primeira resposta
+            if dados_primeira_requisicao is None:
+                dados_primeira_requisicao = dados
 
+            races = (
+                dados.get("MRData", {})
+                .get("RaceTable", {})
+                .get("Races", [])
+            )
+
+            if not races:
+                break
+
+            corrida = races[0]
+
+            pit_stops = corrida.get(
+                "PitStops",
+                []
+            )
+
+            todos_pit_stops.extend(pit_stops)
+
+            # Informações da paginação
+            mrdata = dados.get("MRData", {})
+
+            total = int(mrdata.get("total", 0))
+            current_limit = int(mrdata.get("limit", limit))
+            current_offset = int(mrdata.get("offset", offset))
+
+            print(
+                f"Requisição: offset={current_offset} | "
+                f"recebidos={len(pit_stops)} | "
+                f"total={total}"
+            )
+
+            # Verifica se já buscou tudo
+            if (
+                current_offset + len(pit_stops)
+                >= total
+            ):
+                break
+
+            # Próxima página
+            offset += current_limit
+
+        # ==================================================
+        # 4. MONTAR RESPOSTA COMPLETA
+        # ==================================================
+
+        dados["MRData"]["RaceTable"]["Races"][0][
+            "PitStops"
+        ] = todos_pit_stops
 
         print(
             f"Corrida: {corrida['raceName']}"
         )
 
         print(
-            f"Quantidade de pit stops: "
-            f"{len(pit_stops)}"
+            f"Quantidade total de pit stops: "
+            f"{len(todos_pit_stops)}"
         )
-
 
         # ==================================================
         # 5. SALVAR NO MINIO
@@ -180,13 +205,11 @@ for temporada in range(ANO_INICIAL, ANO_FINAL + 1):
             f"pit_stops.json"
         )
 
-
         conteudo = json.dumps(
             dados,
             ensure_ascii=False,
             indent=2
         ).encode("utf-8")
-
 
         cliente_minio.put_object(
             Bucket=BUCKET,
@@ -195,12 +218,10 @@ for temporada in range(ANO_INICIAL, ANO_FINAL + 1):
             ContentType="application/json"
         )
 
-
         print(
             f"Pit stops {temporada} "
             "salvos no MinIO!"
         )
-
 
     except Exception as erro:
 
