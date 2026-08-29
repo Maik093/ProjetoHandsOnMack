@@ -46,4 +46,10 @@ Thumbs.db
 ~$*.xls
 
 # FastF1
+cache_fastf1/# Ambiente temporário local
+tools/
 cache_fastf1/
+notebooks/.duckdb_extensions/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

@@ -18,6 +18,9 @@ HEADERS = {
     "User-Agent": "F1DataEngineering/1.0"
 }
 
+# Quantidade máxima solicitada em cada página da API.
+LIMIT = 100
+
 MINIO_ENDPOINT = "http://localhost:9000"
 MINIO_ACCESS_KEY = "admin"
 MINIO_SECRET_KEY = "minioadmin123"
@@ -112,52 +115,177 @@ for temporada in range(ANO_INICIAL, ANO_FINAL + 1):
 
 
         # ==================================================
-        # 3. BUSCAR PIT STOPS
+        # 3. BUSCAR PIT STOPS COM PAGINAÇÃO
         # ==================================================
 
-        URL = (
+        URL_PIT_STOPS = (
             f"https://api.jolpi.ca/ergast/f1/"
             f"{temporada}/{round_interlagos}/pitstops/"
         )
 
-        response = requests.get(
-            URL,
-            headers=HEADERS,
-            timeout=30
-        )
 
-        response.raise_for_status()
-
-        dados = response.json()
+        offset = 0
+        total_esperado = None
+        pit_stops_acumulados = []
+        dados_consolidados = None
 
 
-        # ==================================================
-        # 4. EXTRAIR CORRIDA
-        # ==================================================
-
-        races = (
-            dados.get("MRData", {})
-            .get("RaceTable", {})
-            .get("Races", [])
-        )
-
-
-        if not races:
+        while True:
 
             print(
-                f"Sem dados de pit stops "
-                f"para {temporada}."
+                f"Consultando página de pit stops "
+                f"com offset={offset}..."
             )
 
-            continue
+            response = requests.get(
+                URL_PIT_STOPS,
+                headers=HEADERS,
+                params={
+                    "limit": LIMIT,
+                    "offset": offset
+                },
+                timeout=30
+            )
+
+            response.raise_for_status()
+
+            dados_pagina = response.json()
+
+            mrdata = dados_pagina.get(
+                "MRData",
+                {}
+            )
+
+            races = (
+                mrdata
+                .get("RaceTable", {})
+                .get("Races", [])
+            )
 
 
-        corrida = races[0]
+            if not races:
 
-        pit_stops = corrida.get(
-            "PitStops",
-            []
-        )
+                raise ValueError(
+                    f"Sem dados de pit stops para "
+                    f"{temporada} no offset {offset}."
+                )
+
+
+            corrida = races[0]
+
+            pit_stops_pagina = corrida.get(
+                "PitStops",
+                []
+            )
+
+            if dados_consolidados is None:
+
+                dados_consolidados = dados_pagina
+
+
+            try:
+
+                total_esperado = int(
+                    mrdata.get("total", 0)
+                )
+
+                limite_retorno = int(
+                    mrdata.get("limit", LIMIT)
+                )
+
+                offset_retorno = int(
+                    mrdata.get("offset", offset)
+                )
+
+            except (TypeError, ValueError) as erro:
+
+                raise ValueError(
+                    f"Metadados de paginação inválidos "
+                    f"para {temporada}: {erro}"
+                )
+
+
+            print(
+                f"Temporada: {temporada}"
+            )
+
+            print(
+                f"Total esperado: {total_esperado}"
+            )
+
+            print(
+                f"Página/offset consultado: "
+                f"{offset_retorno}"
+            )
+
+            print(
+                f"Registros retornados na página: "
+                f"{len(pit_stops_pagina)}"
+            )
+
+
+            pit_stops_acumulados.extend(
+                pit_stops_pagina
+            )
+
+
+            print(
+                f"Registros coletados: "
+                f"{len(pit_stops_acumulados)}"
+            )
+
+
+            proximo_offset = (
+                offset_retorno
+                + limite_retorno
+            )
+
+
+            if proximo_offset >= total_esperado:
+
+                break
+
+
+            if proximo_offset <= offset:
+
+                raise ValueError(
+                    f"Paginação sem avanço para "
+                    f"{temporada}: offset atual {offset}, "
+                    f"próximo offset {proximo_offset}."
+                )
+
+
+            offset = proximo_offset
+
+
+        # ==================================================
+        # 4. VALIDAR E CONSOLIDAR PIT STOPS
+        # ==================================================
+
+        if len(pit_stops_acumulados) != total_esperado:
+
+            raise ValueError(
+                f"Divergência na coleta de pit stops "
+                f"para {temporada}: esperado "
+                f"{total_esperado}, coletado "
+                f"{len(pit_stops_acumulados)}."
+            )
+
+
+        dados_consolidados[
+            "MRData"
+        ][
+            "RaceTable"
+        ][
+            "Races"
+        ][
+            0
+        ][
+            "PitStops"
+        ] = pit_stops_acumulados
+
+
+        pit_stops = pit_stops_acumulados
 
 
         print(
@@ -167,6 +295,10 @@ for temporada in range(ANO_INICIAL, ANO_FINAL + 1):
         print(
             f"Quantidade de pit stops: "
             f"{len(pit_stops)}"
+        )
+
+        print(
+            "Validação final: OK"
         )
 
 
@@ -182,7 +314,7 @@ for temporada in range(ANO_INICIAL, ANO_FINAL + 1):
 
 
         conteudo = json.dumps(
-            dados,
+            dados_consolidados,
             ensure_ascii=False,
             indent=2
         ).encode("utf-8")
