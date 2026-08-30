@@ -1,4 +1,5 @@
 import json
+import unicodedata
 from io import BytesIO
 
 import boto3
@@ -19,6 +20,54 @@ MINIO_ACCESS_KEY = "admin"
 MINIO_SECRET_KEY = "minioadmin123"
 
 BUCKET = "f1-data-lake"
+
+
+EVENTOS_INTERLAGOS = {
+    2018: "Brazilian Grand Prix",
+    2019: "Brazilian Grand Prix",
+}
+
+
+def normalizar_texto(valor):
+    """Normaliza texto para validações dos metadados Bronze."""
+    if valor is None:
+        return ""
+
+    return " ".join(
+        unicodedata.normalize("NFKD", str(valor))
+        .encode("ascii", "ignore")
+        .decode("ascii")
+        .casefold()
+        .split()
+    )
+
+
+def validar_metadados_interlagos(dados_json, temporada):
+    """Impede que Bronze de outro evento seja promovida para a Silver."""
+    nome_esperado = EVENTOS_INTERLAGOS.get(
+        temporada,
+        "São Paulo Grand Prix" if temporada >= 2021 else None
+    )
+
+    if nome_esperado is None:
+        return False, "temporada sem GP de Interlagos no recorte atual"
+
+    if dados_json.get("season") != temporada:
+        return False, f"season Bronze inválida: {dados_json.get('season')!r}"
+
+    if normalizar_texto(dados_json.get("event_name")) != normalizar_texto(nome_esperado):
+        return False, f"event_name inválido: {dados_json.get('event_name')!r}"
+
+    if normalizar_texto(dados_json.get("location")) != normalizar_texto("São Paulo"):
+        return False, f"location/circuito inválido: {dados_json.get('location')!r}"
+
+    if normalizar_texto(dados_json.get("circuit")) != normalizar_texto("Interlagos"):
+        return False, f"circuit inválido: {dados_json.get('circuit')!r}"
+
+    if not dados_json.get("event_date") or str(dados_json["event_date"])[:4] != str(temporada):
+        return False, f"event_date inválida: {dados_json.get('event_date')!r}"
+
+    return True, None
 
 
 # ======================================================================
@@ -246,6 +295,30 @@ for temporada in range(
         dados_json = json.loads(
             conteudo.decode("utf-8")
         )
+
+
+        # ==============================================================
+        # VALIDAR IDENTIDADE DO EVENTO
+        # ==============================================================
+
+        evento_valido, motivo_evento_invalido = (
+            validar_metadados_interlagos(
+                dados_json,
+                temporada
+            )
+        )
+
+        if not evento_valido:
+
+            raise ValueError(
+                "Bronze rejeitada: não representa o GP de Interlagos. "
+                f"season={temporada}; "
+                f"event_name={dados_json.get('event_name')!r}; "
+                f"location={dados_json.get('location')!r}; "
+                f"circuit={dados_json.get('circuit')!r}; "
+                f"event_date={dados_json.get('event_date')!r}; "
+                f"motivo={motivo_evento_invalido}"
+            )
 
 
         # ==============================================================

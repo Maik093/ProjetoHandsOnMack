@@ -1,4 +1,5 @@
 import json
+import unicodedata
 from io import BytesIO
 from pathlib import Path
 
@@ -22,6 +23,60 @@ MINIO_ACCESS_KEY = "admin"
 MINIO_SECRET_KEY = "minioadmin123"
 
 BUCKET = "f1-data-lake"
+
+
+# O GP do Brasil não ocorreu em 2020. O FastF1 pode resolver uma busca
+# textual por "São Paulo" para outro evento; por isso a sessão retornada
+# precisa ser validada antes de qualquer persistência.
+EVENTOS_INTERLAGOS = {
+    2018: "Brazilian Grand Prix",
+    2019: "Brazilian Grand Prix",
+}
+
+
+def normalizar_texto(valor):
+    """Normaliza texto para comparações de metadados do evento."""
+    if valor is None:
+        return ""
+
+    return " ".join(
+        unicodedata.normalize("NFKD", str(valor))
+        .encode("ascii", "ignore")
+        .decode("ascii")
+        .casefold()
+        .split()
+    )
+
+
+def validar_evento_interlagos(temporada, evento):
+    """Valida se o evento FastF1 é realmente o GP de Interlagos."""
+    nome_evento = evento.EventName
+    localizacao = evento.Location
+    data_evento = evento.EventDate
+    pais = evento.get("Country", None)
+
+    nome_esperado = EVENTOS_INTERLAGOS.get(
+        temporada,
+        "São Paulo Grand Prix" if temporada >= 2021 else None
+    )
+
+    if nome_esperado is None:
+        return False, "temporada sem GP de Interlagos no recorte atual"
+
+    if normalizar_texto(nome_evento) != normalizar_texto(nome_esperado):
+        return False, f"event_name inesperado: {nome_evento!r}"
+
+    # FastF1 expõe a localização do circuito no metadado Location.
+    if normalizar_texto(localizacao) != normalizar_texto("São Paulo"):
+        return False, f"location/circuito FastF1 inesperado: {localizacao!r}"
+
+    if pais is not None and normalizar_texto(pais) != normalizar_texto("Brazil"):
+        return False, f"país FastF1 inesperado: {pais!r}"
+
+    if data_evento is None or str(data_evento)[:4] != str(temporada):
+        return False, f"event_date incompatível: {data_evento!r}"
+
+    return True, None
 
 
 # ==================================================
@@ -184,6 +239,50 @@ for temporada in range(
         print(
             "Sessão carregada com sucesso!"
         )
+
+
+        # ==================================================
+        # 3.1 VALIDAR EVENTO RETORNADO PELO FASTF1
+        # ==================================================
+
+        evento_valido, motivo_evento_invalido = (
+            validar_evento_interlagos(
+                temporada,
+                sessao.event
+            )
+        )
+
+        if not evento_valido:
+
+            print(
+                "⚠ Sessão rejeitada: não pertence ao GP de Interlagos."
+            )
+
+            print(
+                f"  season: {temporada}"
+            )
+
+            print(
+                f"  event_name: {sessao.event.EventName}"
+            )
+
+            print(
+                f"  location: {sessao.event.Location}"
+            )
+
+            print(
+                f"  event_date: {sessao.event.EventDate}"
+            )
+
+            print(
+                f"  motivo: {motivo_evento_invalido}"
+            )
+
+            print(
+                "  Nenhum objeto Bronze será persistido."
+            )
+
+            continue
 
 
         # ==================================================
@@ -451,7 +550,7 @@ for temporada in range(
 
             "season": temporada,
 
-            "grand_prix": GP,
+            "grand_prix": sessao.event.EventName,
 
             "circuit": "Interlagos",
 
