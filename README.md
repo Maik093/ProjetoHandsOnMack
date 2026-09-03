@@ -400,16 +400,13 @@ Antes de executar a aplicação, crie o arquivo:
 .streamlit/secrets.toml
 ```
 Configure as informações de acesso ao MinIO:
+```
 [minio]
-
 endpoint = "localhost:9000"
-
 access_key = "admin"
-
 secret_key = "minioadmin123"
-
 use_ssl = false
-
+```
 9. Executar a aplicação Streamlit
 
 Com o MinIO em execução e os dados disponíveis na camada Silver:
