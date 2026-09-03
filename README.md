@@ -401,9 +401,13 @@ Antes de executar a aplicação, crie o arquivo:
 ```
 Configure as informações de acesso ao MinIO:
 [minio]
+
 endpoint = "localhost:9000"
+
 access_key = "admin"
+
 secret_key = "minioadmin123"
+
 use_ssl = false
 
 9. Executar a aplicação Streamlit
