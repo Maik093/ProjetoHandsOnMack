@@ -360,7 +360,7 @@ python pre_processamento/silver_pneus.py
 
 python pre_processamento/silver_consolidar_arquivos.py
 
-python pre_processamento\silver_driver_mapping.py
+python pre_processamento/silver_driver_mapping.py
 ```
 
 Ao final dessa etapa, os dados tratados estarão disponíveis na camada Silver.
