@@ -3,3 +3,7 @@ requests
 fastf1
 duckdb
 pyarrow
+streamlit
+pandas
+numpy
+plotly

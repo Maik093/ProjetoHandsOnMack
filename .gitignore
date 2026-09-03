@@ -47,3 +47,6 @@ Thumbs.db
 
 # FastF1
 cache_fastf1/
+
+#Streamlit
+.streamlit/secrets.toml
