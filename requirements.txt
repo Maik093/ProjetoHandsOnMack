@@ -8,3 +8,5 @@ pandas
 numpy
 plotly
 pytest
+tabulate
+scikit-learn

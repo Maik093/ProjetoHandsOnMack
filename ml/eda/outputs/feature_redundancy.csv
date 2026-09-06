@@ -1,0 +1,9 @@
+﻿feature_a,feature_b,spearman,abs_spearman
+qtd_pit_stops,qtd_stints,0.9966008058222404,0.9966008058222404
+cobertura_ritmo_pct,voltas_stint_medio,0.9025440308371863,0.9025440308371863
+voltas_analisadas,voltas_stint_medio,0.852002697077173,0.852002697077173
+cobertura_ritmo_pct,qtd_pit_stops,-0.831596051175406,0.831596051175406
+track_temp_media,humidity_media,-0.8214285714285714,0.8214285714285714
+voltas_analisadas,cobertura_ritmo_pct,0.8179619241174679,0.8179619241174679
+cobertura_ritmo_pct,qtd_stints,-0.8169498096770124,0.8169498096770124
+voltas_analisadas,voltas_disponiveis,0.8020567057736488,0.8020567057736488

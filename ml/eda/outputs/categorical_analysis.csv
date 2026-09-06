@@ -1,0 +1,13 @@
+﻿feature,primeiro_composto,registros,vitorias,taxa_vitoria_pct,composto_mais_utilizado
+primeiro_composto,HARD,6,0,0.0,
+primeiro_composto,INTERMEDIATE,18,1,5.56,
+primeiro_composto,MEDIUM,42,2,4.76,
+primeiro_composto,SOFT,62,3,4.84,
+primeiro_composto,SUPERSOFT,9,1,11.11,
+primeiro_composto,,3,0,0.0,
+composto_mais_utilizado,,13,1,7.69,HARD
+composto_mais_utilizado,,18,1,5.56,INTERMEDIATE
+composto_mais_utilizado,,52,2,3.85,MEDIUM
+composto_mais_utilizado,,51,3,5.88,SOFT
+composto_mais_utilizado,,3,0,0.0,SUPERSOFT
+composto_mais_utilizado,,3,0,0.0,
