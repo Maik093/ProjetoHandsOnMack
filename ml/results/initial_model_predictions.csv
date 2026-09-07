@@ -1,0 +1,301 @@
+pilot_race_key,race_key,driver_key,season,round,full_name,constructor_name,grid,modelo,y_real,y_pred,probabilidade_vitoria,acertou,erro,fold
+69,80,16,2018,20,Lewis Hamilton,Mercedes,1,Logistic Regression,1,1,0.7666484939597767,True,False,5
+82,80,47,2018,20,Sebastian Vettel,Ferrari,2,Logistic Regression,0,1,0.7984929874433164,False,True,5
+64,80,6,2018,20,Valtteri Bottas,Mercedes,3,Logistic Regression,0,0,0.40973113768556,True,False,5
+76,80,35,2018,20,Kimi Räikkönen,Ferrari,4,Logistic Regression,0,1,0.7993372870255817,False,True,5
+73,80,27,2018,20,Max Verstappen,Red Bull,5,Logistic Regression,0,1,0.8742185192117065,False,True,5
+66,80,10,2018,20,Marcus Ericsson,Sauber,6,Logistic Regression,0,0,0.002592752666226355,True,False,5
+72,80,24,2018,20,Charles Leclerc,Sauber,7,Logistic Regression,0,0,0.14435165557826712,True,False,5
+68,80,13,2018,20,Romain Grosjean,Haas F1 Team,8,Logistic Regression,0,0,0.1277469134385927,True,False,5
+67,80,11,2018,20,Pierre Gasly,Toro Rosso,9,Logistic Regression,0,0,0.00716685501064248,True,False,5
+71,80,19,2018,20,Kevin Magnussen,Haas F1 Team,10,Logistic Regression,0,0,0.31503193281459557,True,False,5
+77,80,36,2018,20,Daniel Ricciardo,Red Bull,11,Logistic Regression,0,1,0.6454305401831664,False,True,5
+75,80,33,2018,20,Sergio Pérez,Force India,12,Logistic Regression,0,0,0.06393510209530215,True,False,5
+70,80,17,2018,20,Nico Hülkenberg,Renault,13,Logistic Regression,0,0,0.05418801319558165,True,False,5
+79,80,42,2018,20,Sergey Sirotkin,Williams,14,Logistic Regression,0,0,0.0015130136253140932,True,False,5
+78,80,40,2018,20,Carlos Sainz,Renault,15,Logistic Regression,0,0,0.010698027268936537,True,False,5
+65,80,7,2018,20,Brendon Hartley,Toro Rosso,16,Logistic Regression,0,0,0.0022119491380995036,True,False,5
+63,80,2,2018,20,Fernando Alonso,McLaren,17,Logistic Regression,0,0,0.00019295611918544584,True,False,5
+74,80,32,2018,20,Esteban Ocon,Force India,18,Logistic Regression,0,0,0.01259301919880327,True,False,5
+80,80,44,2018,20,Lance Stroll,Williams,19,Logistic Regression,0,0,0.00021579471223904026,True,False,5
+81,80,46,2018,20,Stoffel Vandoorne,McLaren,20,Logistic Regression,0,0,0.0026013515091673533,True,False,5
+94,101,27,2019,20,Max Verstappen,Red Bull,1,Logistic Regression,1,1,0.9903787597104983,True,False,4
+102,101,47,2019,20,Sebastian Vettel,Ferrari,2,Logistic Regression,0,1,0.9769723240848337,False,True,4
+88,101,16,2019,20,Lewis Hamilton,Mercedes,3,Logistic Regression,0,1,0.9851150977368396,False,True,4
+84,101,6,2019,20,Valtteri Bottas,Mercedes,4,Logistic Regression,0,0,0.4171248013767764,True,False,4
+83,101,1,2019,20,Alexander Albon,Red Bull,5,Logistic Regression,0,1,0.914837987459113,False,True,4
+85,101,11,2019,20,Pierre Gasly,Toro Rosso,6,Logistic Regression,0,0,0.42143316734259156,True,False,4
+87,101,13,2019,20,Romain Grosjean,Haas F1 Team,7,Logistic Regression,0,0,0.10607027780437864,True,False,4
+97,101,35,2019,20,Kimi Räikkönen,Alfa Romeo,8,Logistic Regression,0,0,0.1701735937282917,True,False,4
+90,101,19,2019,20,Kevin Magnussen,Haas F1 Team,9,Logistic Regression,0,0,0.07186851561304058,True,False,4
+95,101,31,2019,20,Lando Norris,McLaren,10,Logistic Regression,0,0,0.021204980308343162,True,False,4
+98,101,36,2019,20,Daniel Ricciardo,Renault,11,Logistic Regression,0,0,0.012202055500308196,True,False,4
+86,101,12,2019,20,Antonio Giovinazzi,Alfa Romeo,12,Logistic Regression,0,0,0.09025997585644951,True,False,4
+89,101,17,2019,20,Nico Hülkenberg,Renault,13,Logistic Regression,0,0,0.0019500658831465819,True,False,4
+93,101,24,2019,20,Charles Leclerc,Ferrari,14,Logistic Regression,0,0,0.07927088084989983,True,False,4
+96,101,33,2019,20,Sergio Pérez,Racing Point,15,Logistic Regression,0,0,0.0474078791155584,True,False,4
+92,101,21,2019,20,Daniil Kvyat,Toro Rosso,16,Logistic Regression,0,0,0.013594740998996362,True,False,4
+101,101,44,2019,20,Lance Stroll,Racing Point,17,Logistic Regression,0,0,0.012393767613283663,True,False,4
+99,101,39,2019,20,George Russell,Williams,18,Logistic Regression,0,0,9.24176837350283e-05,True,False,4
+91,101,20,2019,20,Robert Kubica,Williams,19,Logistic Regression,0,0,9.820715444287738e-07,True,False,4
+100,101,40,2019,20,Carlos Sainz,McLaren,20,Logistic Regression,0,0,0.04247176752490936,True,False,4
+116,138,35,2021,19,Kimi Räikkönen,Alfa Romeo,0,Logistic Regression,0,1,0.894450745640839,False,True,3
+104,138,6,2021,19,Valtteri Bottas,Mercedes,1,Logistic Regression,0,1,0.9888675290258728,False,True,3
+110,138,27,2021,19,Max Verstappen,Red Bull,2,Logistic Regression,0,1,0.989387982847529,False,True,3
+119,138,40,2021,19,Carlos Sainz,Ferrari,3,Logistic Regression,0,1,0.9212865045525727,False,True,3
+115,138,33,2021,19,Sergio Pérez,Red Bull,4,Logistic Regression,0,1,0.7506453017438625,False,True,3
+113,138,31,2021,19,Lando Norris,McLaren,5,Logistic Regression,0,1,0.7419767927387567,False,True,3
+109,138,24,2021,19,Charles Leclerc,Ferrari,6,Logistic Regression,0,1,0.8248367798200321,False,True,3
+105,138,11,2021,19,Pierre Gasly,AlphaTauri,7,Logistic Regression,0,0,0.4237778700162967,True,False,3
+114,138,32,2021,19,Esteban Ocon,Alpine F1 Team,8,Logistic Regression,0,0,0.33352041062750115,True,False,3
+122,138,47,2021,19,Sebastian Vettel,Aston Martin,9,Logistic Regression,0,0,0.20670267577336807,True,False,3
+107,138,16,2021,19,Lewis Hamilton,Mercedes,10,Logistic Regression,1,1,0.7820198424797024,True,False,3
+117,138,36,2021,19,Daniel Ricciardo,McLaren,11,Logistic Regression,0,0,0.06901346705720675,True,False,3
+103,138,2,2021,19,Fernando Alonso,Alpine F1 Team,12,Logistic Regression,0,0,0.16296516464873292,True,False,3
+106,138,12,2021,19,Antonio Giovinazzi,Alfa Romeo,13,Logistic Regression,0,0,0.026447248495057703,True,False,3
+120,138,44,2021,19,Lance Stroll,Aston Martin,14,Logistic Regression,0,0,0.013863984403383331,True,False,3
+121,138,45,2021,19,Yuki Tsunoda,AlphaTauri,15,Logistic Regression,0,0,0.07066171866354998,True,False,3
+108,138,22,2021,19,Nicholas Latifi,Williams,16,Logistic Regression,0,0,0.00481745653827474,True,False,3
+118,138,39,2021,19,George Russell,Williams,17,Logistic Regression,0,0,0.001215860018562581,True,False,3
+112,138,29,2021,19,Mick Schumacher,Haas F1 Team,18,Logistic Regression,0,0,0.00024281967086577357,True,False,3
+111,138,28,2021,19,Nikita Mazepin,Haas F1 Team,19,Logistic Regression,0,0,0.0005638702529270096,True,False,3
+140,162,45,2022,21,Yuki Tsunoda,AlphaTauri,0,Logistic Regression,0,0,0.009314997268841703,True,False,2
+137,162,39,2022,21,George Russell,Mercedes,1,Logistic Regression,1,0,0.27357939133763526,False,True,2
+127,162,16,2022,21,Lewis Hamilton,Mercedes,2,Logistic Regression,0,0,0.25983475101493336,True,False,2
+131,162,27,2022,21,Max Verstappen,Red Bull,3,Logistic Regression,0,0,0.016398195865660846,True,False,2
+135,162,33,2022,21,Sergio Pérez,Red Bull,4,Logistic Regression,0,0,0.1553951549005648,True,False,2
+130,162,24,2022,21,Charles Leclerc,Ferrari,5,Logistic Regression,0,0,0.1259370343572747,True,False,2
+133,162,31,2022,21,Lando Norris,McLaren,6,Logistic Regression,0,0,0.0005593756357047581,True,False,2
+138,162,40,2022,21,Carlos Sainz,Ferrari,7,Logistic Regression,0,0,0.1331482473631839,True,False,2
+128,162,19,2022,21,Kevin Magnussen,Haas F1 Team,8,Logistic Regression,0,0,0.0006535851841275534,True,False,2
+141,162,47,2022,21,Sebastian Vettel,Aston Martin,9,Logistic Regression,0,0,0.007453348740119013,True,False,2
+126,162,11,2022,21,Pierre Gasly,AlphaTauri,10,Logistic Regression,0,0,0.006736434198396085,True,False,2
+136,162,36,2022,21,Daniel Ricciardo,McLaren,11,Logistic Regression,0,0,0.00025883399636692997,True,False,2
+132,162,29,2022,21,Mick Schumacher,Haas F1 Team,12,Logistic Regression,0,0,0.0012122355094697308,True,False,2
+142,162,49,2022,21,Guanyu Zhou,Alfa Romeo,13,Logistic Regression,0,0,0.0006241205013375786,True,False,2
+125,162,6,2022,21,Valtteri Bottas,Alfa Romeo,14,Logistic Regression,0,0,0.002562410665208614,True,False,2
+139,162,44,2022,21,Lance Stroll,Aston Martin,15,Logistic Regression,0,0,0.002857592235987355,True,False,2
+134,162,32,2022,21,Esteban Ocon,Alpine F1 Team,16,Logistic Regression,0,0,0.001996941113024379,True,False,2
+124,162,2,2022,21,Fernando Alonso,Alpine F1 Team,17,Logistic Regression,0,0,0.008666618198788853,True,False,2
+129,162,22,2022,21,Nicholas Latifi,Williams,18,Logistic Regression,0,0,4.839999049080898e-05,True,False,2
+123,162,1,2022,21,Alexander Albon,Williams,19,Logistic Regression,0,0,0.00045500981776898955,True,False,2
+151,183,27,2023,20,Max Verstappen,Red Bull,1,Logistic Regression,1,0,0.2345698259992267,False,True,1
+150,183,24,2023,20,Charles Leclerc,Ferrari,2,Logistic Regression,0,0,0.06963438672328152,True,False,1
+160,183,44,2023,20,Lance Stroll,Aston Martin,3,Logistic Regression,0,0,0.021476509224876327,True,False,1
+144,183,2,2023,20,Fernando Alonso,Aston Martin,4,Logistic Regression,0,0,0.029733307291259652,True,False,1
+147,183,16,2023,20,Lewis Hamilton,Mercedes,5,Logistic Regression,0,0,0.007913792030670113,True,False,1
+152,183,31,2023,20,Lando Norris,McLaren,6,Logistic Regression,0,0,0.08893926834719283,True,False,1
+158,183,40,2023,20,Carlos Sainz,Ferrari,7,Logistic Regression,0,0,0.009919467016383188,True,False,1
+157,183,39,2023,20,George Russell,Mercedes,8,Logistic Regression,0,0,0.002104596688350506,True,False,1
+154,183,33,2023,20,Sergio Pérez,Red Bull,9,Logistic Regression,0,0,0.014411331874264447,True,False,1
+155,183,34,2023,20,Oscar Piastri,McLaren,10,Logistic Regression,0,0,0.003993751684488733,True,False,1
+148,183,17,2023,20,Nico Hülkenberg,Haas F1 Team,11,Logistic Regression,0,0,0.0007229618099641434,True,False,1
+149,183,19,2023,20,Kevin Magnussen,Haas F1 Team,12,Logistic Regression,0,0,0.0010752659802415851,True,False,1
+143,183,1,2023,20,Alexander Albon,Williams,13,Logistic Regression,0,0,0.0009245092090594411,True,False,1
+153,183,32,2023,20,Esteban Ocon,Alpine F1 Team,14,Logistic Regression,0,0,0.0015931042182901521,True,False,1
+146,183,11,2023,20,Pierre Gasly,Alpine F1 Team,15,Logistic Regression,0,0,0.0024756459421674277,True,False,1
+161,183,45,2023,20,Yuki Tsunoda,AlphaTauri,16,Logistic Regression,0,0,0.0023443895940561694,True,False,1
+156,183,36,2023,20,Daniel Ricciardo,AlphaTauri,17,Logistic Regression,0,0,0.00176453218770633,True,False,1
+145,183,6,2023,20,Valtteri Bottas,Alfa Romeo,18,Logistic Regression,0,0,0.00010307285678013537,True,False,1
+159,183,41,2023,20,Logan Sargeant,Williams,19,Logistic Regression,0,0,6.067347483329006e-05,True,False,1
+162,183,49,2023,20,Guanyu Zhou,Alfa Romeo,20,Logistic Regression,0,0,2.1503731838554287e-05,True,False,1
+69,80,16,2018,20,Lewis Hamilton,Mercedes,1,Decision Tree,1,1,1.0,True,False,5
+82,80,47,2018,20,Sebastian Vettel,Ferrari,2,Decision Tree,0,1,1.0,False,True,5
+64,80,6,2018,20,Valtteri Bottas,Mercedes,3,Decision Tree,0,1,1.0,False,True,5
+76,80,35,2018,20,Kimi Räikkönen,Ferrari,4,Decision Tree,0,1,1.0,False,True,5
+73,80,27,2018,20,Max Verstappen,Red Bull,5,Decision Tree,0,1,1.0,False,True,5
+66,80,10,2018,20,Marcus Ericsson,Sauber,6,Decision Tree,0,0,0.0,True,False,5
+72,80,24,2018,20,Charles Leclerc,Sauber,7,Decision Tree,0,0,0.0,True,False,5
+68,80,13,2018,20,Romain Grosjean,Haas F1 Team,8,Decision Tree,0,0,0.0,True,False,5
+67,80,11,2018,20,Pierre Gasly,Toro Rosso,9,Decision Tree,0,0,0.0,True,False,5
+71,80,19,2018,20,Kevin Magnussen,Haas F1 Team,10,Decision Tree,0,0,0.0,True,False,5
+77,80,36,2018,20,Daniel Ricciardo,Red Bull,11,Decision Tree,0,1,1.0,False,True,5
+75,80,33,2018,20,Sergio Pérez,Force India,12,Decision Tree,0,0,0.0,True,False,5
+70,80,17,2018,20,Nico Hülkenberg,Renault,13,Decision Tree,0,0,0.0,True,False,5
+79,80,42,2018,20,Sergey Sirotkin,Williams,14,Decision Tree,0,0,0.0,True,False,5
+78,80,40,2018,20,Carlos Sainz,Renault,15,Decision Tree,0,0,0.0,True,False,5
+65,80,7,2018,20,Brendon Hartley,Toro Rosso,16,Decision Tree,0,0,0.0,True,False,5
+63,80,2,2018,20,Fernando Alonso,McLaren,17,Decision Tree,0,0,0.0,True,False,5
+74,80,32,2018,20,Esteban Ocon,Force India,18,Decision Tree,0,0,0.0,True,False,5
+80,80,44,2018,20,Lance Stroll,Williams,19,Decision Tree,0,0,0.0,True,False,5
+81,80,46,2018,20,Stoffel Vandoorne,McLaren,20,Decision Tree,0,0,0.0,True,False,5
+94,101,27,2019,20,Max Verstappen,Red Bull,1,Decision Tree,1,1,1.0,True,False,4
+102,101,47,2019,20,Sebastian Vettel,Ferrari,2,Decision Tree,0,1,1.0,False,True,4
+88,101,16,2019,20,Lewis Hamilton,Mercedes,3,Decision Tree,0,1,1.0,False,True,4
+84,101,6,2019,20,Valtteri Bottas,Mercedes,4,Decision Tree,0,0,0.0,True,False,4
+83,101,1,2019,20,Alexander Albon,Red Bull,5,Decision Tree,0,1,1.0,False,True,4
+85,101,11,2019,20,Pierre Gasly,Toro Rosso,6,Decision Tree,0,0,0.0,True,False,4
+87,101,13,2019,20,Romain Grosjean,Haas F1 Team,7,Decision Tree,0,0,0.0,True,False,4
+97,101,35,2019,20,Kimi Räikkönen,Alfa Romeo,8,Decision Tree,0,0,0.0,True,False,4
+90,101,19,2019,20,Kevin Magnussen,Haas F1 Team,9,Decision Tree,0,0,0.0,True,False,4
+95,101,31,2019,20,Lando Norris,McLaren,10,Decision Tree,0,0,0.0,True,False,4
+98,101,36,2019,20,Daniel Ricciardo,Renault,11,Decision Tree,0,0,0.0,True,False,4
+86,101,12,2019,20,Antonio Giovinazzi,Alfa Romeo,12,Decision Tree,0,0,0.0,True,False,4
+89,101,17,2019,20,Nico Hülkenberg,Renault,13,Decision Tree,0,0,0.0,True,False,4
+93,101,24,2019,20,Charles Leclerc,Ferrari,14,Decision Tree,0,0,0.0,True,False,4
+96,101,33,2019,20,Sergio Pérez,Racing Point,15,Decision Tree,0,0,0.0,True,False,4
+92,101,21,2019,20,Daniil Kvyat,Toro Rosso,16,Decision Tree,0,0,0.0,True,False,4
+101,101,44,2019,20,Lance Stroll,Racing Point,17,Decision Tree,0,0,0.0,True,False,4
+99,101,39,2019,20,George Russell,Williams,18,Decision Tree,0,0,0.0,True,False,4
+91,101,20,2019,20,Robert Kubica,Williams,19,Decision Tree,0,0,0.0,True,False,4
+100,101,40,2019,20,Carlos Sainz,McLaren,20,Decision Tree,0,0,0.0,True,False,4
+116,138,35,2021,19,Kimi Räikkönen,Alfa Romeo,0,Decision Tree,0,0,0.0,True,False,3
+104,138,6,2021,19,Valtteri Bottas,Mercedes,1,Decision Tree,0,1,1.0,False,True,3
+110,138,27,2021,19,Max Verstappen,Red Bull,2,Decision Tree,0,0,0.0,True,False,3
+119,138,40,2021,19,Carlos Sainz,Ferrari,3,Decision Tree,0,0,0.0,True,False,3
+115,138,33,2021,19,Sergio Pérez,Red Bull,4,Decision Tree,0,0,0.0,True,False,3
+113,138,31,2021,19,Lando Norris,McLaren,5,Decision Tree,0,0,0.0,True,False,3
+109,138,24,2021,19,Charles Leclerc,Ferrari,6,Decision Tree,0,0,0.0,True,False,3
+105,138,11,2021,19,Pierre Gasly,AlphaTauri,7,Decision Tree,0,0,0.0,True,False,3
+114,138,32,2021,19,Esteban Ocon,Alpine F1 Team,8,Decision Tree,0,0,0.0,True,False,3
+122,138,47,2021,19,Sebastian Vettel,Aston Martin,9,Decision Tree,0,0,0.0,True,False,3
+107,138,16,2021,19,Lewis Hamilton,Mercedes,10,Decision Tree,1,0,0.0,False,True,3
+117,138,36,2021,19,Daniel Ricciardo,McLaren,11,Decision Tree,0,0,0.0,True,False,3
+103,138,2,2021,19,Fernando Alonso,Alpine F1 Team,12,Decision Tree,0,0,0.0,True,False,3
+106,138,12,2021,19,Antonio Giovinazzi,Alfa Romeo,13,Decision Tree,0,0,0.0,True,False,3
+120,138,44,2021,19,Lance Stroll,Aston Martin,14,Decision Tree,0,0,0.0,True,False,3
+121,138,45,2021,19,Yuki Tsunoda,AlphaTauri,15,Decision Tree,0,0,0.0,True,False,3
+108,138,22,2021,19,Nicholas Latifi,Williams,16,Decision Tree,0,0,0.0,True,False,3
+118,138,39,2021,19,George Russell,Williams,17,Decision Tree,0,0,0.0,True,False,3
+112,138,29,2021,19,Mick Schumacher,Haas F1 Team,18,Decision Tree,0,0,0.0,True,False,3
+111,138,28,2021,19,Nikita Mazepin,Haas F1 Team,19,Decision Tree,0,0,0.0,True,False,3
+140,162,45,2022,21,Yuki Tsunoda,AlphaTauri,0,Decision Tree,0,0,0.0,True,False,2
+137,162,39,2022,21,George Russell,Mercedes,1,Decision Tree,1,0,0.0,False,True,2
+127,162,16,2022,21,Lewis Hamilton,Mercedes,2,Decision Tree,0,0,0.0,True,False,2
+131,162,27,2022,21,Max Verstappen,Red Bull,3,Decision Tree,0,0,0.0,True,False,2
+135,162,33,2022,21,Sergio Pérez,Red Bull,4,Decision Tree,0,0,0.0,True,False,2
+130,162,24,2022,21,Charles Leclerc,Ferrari,5,Decision Tree,0,0,0.0,True,False,2
+133,162,31,2022,21,Lando Norris,McLaren,6,Decision Tree,0,0,0.0,True,False,2
+138,162,40,2022,21,Carlos Sainz,Ferrari,7,Decision Tree,0,0,0.0,True,False,2
+128,162,19,2022,21,Kevin Magnussen,Haas F1 Team,8,Decision Tree,0,0,0.0,True,False,2
+141,162,47,2022,21,Sebastian Vettel,Aston Martin,9,Decision Tree,0,0,0.0,True,False,2
+126,162,11,2022,21,Pierre Gasly,AlphaTauri,10,Decision Tree,0,0,0.0,True,False,2
+136,162,36,2022,21,Daniel Ricciardo,McLaren,11,Decision Tree,0,0,0.0,True,False,2
+132,162,29,2022,21,Mick Schumacher,Haas F1 Team,12,Decision Tree,0,0,0.0,True,False,2
+142,162,49,2022,21,Guanyu Zhou,Alfa Romeo,13,Decision Tree,0,0,0.0,True,False,2
+125,162,6,2022,21,Valtteri Bottas,Alfa Romeo,14,Decision Tree,0,0,0.0,True,False,2
+139,162,44,2022,21,Lance Stroll,Aston Martin,15,Decision Tree,0,0,0.0,True,False,2
+134,162,32,2022,21,Esteban Ocon,Alpine F1 Team,16,Decision Tree,0,0,0.0,True,False,2
+124,162,2,2022,21,Fernando Alonso,Alpine F1 Team,17,Decision Tree,0,0,0.0,True,False,2
+129,162,22,2022,21,Nicholas Latifi,Williams,18,Decision Tree,0,0,0.0,True,False,2
+123,162,1,2022,21,Alexander Albon,Williams,19,Decision Tree,0,0,0.0,True,False,2
+151,183,27,2023,20,Max Verstappen,Red Bull,1,Decision Tree,1,0,0.0,False,True,1
+150,183,24,2023,20,Charles Leclerc,Ferrari,2,Decision Tree,0,0,0.0,True,False,1
+160,183,44,2023,20,Lance Stroll,Aston Martin,3,Decision Tree,0,0,0.0,True,False,1
+144,183,2,2023,20,Fernando Alonso,Aston Martin,4,Decision Tree,0,0,0.0,True,False,1
+147,183,16,2023,20,Lewis Hamilton,Mercedes,5,Decision Tree,0,0,0.0,True,False,1
+152,183,31,2023,20,Lando Norris,McLaren,6,Decision Tree,0,0,0.0,True,False,1
+158,183,40,2023,20,Carlos Sainz,Ferrari,7,Decision Tree,0,0,0.0,True,False,1
+157,183,39,2023,20,George Russell,Mercedes,8,Decision Tree,0,0,0.0,True,False,1
+154,183,33,2023,20,Sergio Pérez,Red Bull,9,Decision Tree,0,0,0.0,True,False,1
+155,183,34,2023,20,Oscar Piastri,McLaren,10,Decision Tree,0,0,0.0,True,False,1
+148,183,17,2023,20,Nico Hülkenberg,Haas F1 Team,11,Decision Tree,0,0,0.0,True,False,1
+149,183,19,2023,20,Kevin Magnussen,Haas F1 Team,12,Decision Tree,0,0,0.0,True,False,1
+143,183,1,2023,20,Alexander Albon,Williams,13,Decision Tree,0,0,0.0,True,False,1
+153,183,32,2023,20,Esteban Ocon,Alpine F1 Team,14,Decision Tree,0,0,0.0,True,False,1
+146,183,11,2023,20,Pierre Gasly,Alpine F1 Team,15,Decision Tree,0,0,0.0,True,False,1
+161,183,45,2023,20,Yuki Tsunoda,AlphaTauri,16,Decision Tree,0,0,0.0,True,False,1
+156,183,36,2023,20,Daniel Ricciardo,AlphaTauri,17,Decision Tree,0,0,0.0,True,False,1
+145,183,6,2023,20,Valtteri Bottas,Alfa Romeo,18,Decision Tree,0,0,0.0,True,False,1
+159,183,41,2023,20,Logan Sargeant,Williams,19,Decision Tree,0,0,0.0,True,False,1
+162,183,49,2023,20,Guanyu Zhou,Alfa Romeo,20,Decision Tree,0,0,0.0,True,False,1
+69,80,16,2018,20,Lewis Hamilton,Mercedes,1,Random Forest,1,0,0.49666666666666665,False,True,5
+82,80,47,2018,20,Sebastian Vettel,Ferrari,2,Random Forest,0,1,0.51,False,True,5
+64,80,6,2018,20,Valtteri Bottas,Mercedes,3,Random Forest,0,0,0.2,True,False,5
+76,80,35,2018,20,Kimi Räikkönen,Ferrari,4,Random Forest,0,0,0.2633333333333333,True,False,5
+73,80,27,2018,20,Max Verstappen,Red Bull,5,Random Forest,0,0,0.32,True,False,5
+66,80,10,2018,20,Marcus Ericsson,Sauber,6,Random Forest,0,0,0.006666666666666667,True,False,5
+72,80,24,2018,20,Charles Leclerc,Sauber,7,Random Forest,0,0,0.016666666666666666,True,False,5
+68,80,13,2018,20,Romain Grosjean,Haas F1 Team,8,Random Forest,0,0,0.023333333333333334,True,False,5
+67,80,11,2018,20,Pierre Gasly,Toro Rosso,9,Random Forest,0,0,0.0033333333333333335,True,False,5
+71,80,19,2018,20,Kevin Magnussen,Haas F1 Team,10,Random Forest,0,0,0.08666666666666667,True,False,5
+77,80,36,2018,20,Daniel Ricciardo,Red Bull,11,Random Forest,0,0,0.3233333333333333,True,False,5
+75,80,33,2018,20,Sergio Pérez,Force India,12,Random Forest,0,0,0.03333333333333333,True,False,5
+70,80,17,2018,20,Nico Hülkenberg,Renault,13,Random Forest,0,0,0.03,True,False,5
+79,80,42,2018,20,Sergey Sirotkin,Williams,14,Random Forest,0,0,0.023333333333333334,True,False,5
+78,80,40,2018,20,Carlos Sainz,Renault,15,Random Forest,0,0,0.02,True,False,5
+65,80,7,2018,20,Brendon Hartley,Toro Rosso,16,Random Forest,0,0,0.013333333333333334,True,False,5
+63,80,2,2018,20,Fernando Alonso,McLaren,17,Random Forest,0,0,0.006666666666666667,True,False,5
+74,80,32,2018,20,Esteban Ocon,Force India,18,Random Forest,0,0,0.016666666666666666,True,False,5
+80,80,44,2018,20,Lance Stroll,Williams,19,Random Forest,0,0,0.006666666666666667,True,False,5
+81,80,46,2018,20,Stoffel Vandoorne,McLaren,20,Random Forest,0,0,0.03666666666666667,True,False,5
+94,101,27,2019,20,Max Verstappen,Red Bull,1,Random Forest,1,1,0.7966666666666666,True,False,4
+102,101,47,2019,20,Sebastian Vettel,Ferrari,2,Random Forest,0,0,0.29,True,False,4
+88,101,16,2019,20,Lewis Hamilton,Mercedes,3,Random Forest,0,0,0.41333333333333333,True,False,4
+84,101,6,2019,20,Valtteri Bottas,Mercedes,4,Random Forest,0,0,0.17666666666666667,True,False,4
+83,101,1,2019,20,Alexander Albon,Red Bull,5,Random Forest,0,0,0.4066666666666667,True,False,4
+85,101,11,2019,20,Pierre Gasly,Toro Rosso,6,Random Forest,0,0,0.07,True,False,4
+87,101,13,2019,20,Romain Grosjean,Haas F1 Team,7,Random Forest,0,0,0.01,True,False,4
+97,101,35,2019,20,Kimi Räikkönen,Alfa Romeo,8,Random Forest,0,0,0.013333333333333334,True,False,4
+90,101,19,2019,20,Kevin Magnussen,Haas F1 Team,9,Random Forest,0,0,0.02,True,False,4
+95,101,31,2019,20,Lando Norris,McLaren,10,Random Forest,0,0,0.06333333333333334,True,False,4
+98,101,36,2019,20,Daniel Ricciardo,Renault,11,Random Forest,0,0,0.016666666666666666,True,False,4
+86,101,12,2019,20,Antonio Giovinazzi,Alfa Romeo,12,Random Forest,0,0,0.06666666666666667,True,False,4
+89,101,17,2019,20,Nico Hülkenberg,Renault,13,Random Forest,0,0,0.023333333333333334,True,False,4
+93,101,24,2019,20,Charles Leclerc,Ferrari,14,Random Forest,0,0,0.16666666666666666,True,False,4
+96,101,33,2019,20,Sergio Pérez,Racing Point,15,Random Forest,0,0,0.06666666666666667,True,False,4
+92,101,21,2019,20,Daniil Kvyat,Toro Rosso,16,Random Forest,0,0,0.07,True,False,4
+101,101,44,2019,20,Lance Stroll,Racing Point,17,Random Forest,0,0,0.0,True,False,4
+99,101,39,2019,20,George Russell,Williams,18,Random Forest,0,0,0.06666666666666667,True,False,4
+91,101,20,2019,20,Robert Kubica,Williams,19,Random Forest,0,0,0.0,True,False,4
+100,101,40,2019,20,Carlos Sainz,McLaren,20,Random Forest,0,0,0.07333333333333333,True,False,4
+116,138,35,2021,19,Kimi Räikkönen,Alfa Romeo,0,Random Forest,0,0,0.29333333333333333,True,False,3
+104,138,6,2021,19,Valtteri Bottas,Mercedes,1,Random Forest,0,1,0.72,False,True,3
+110,138,27,2021,19,Max Verstappen,Red Bull,2,Random Forest,0,0,0.4166666666666667,True,False,3
+119,138,40,2021,19,Carlos Sainz,Ferrari,3,Random Forest,0,0,0.14,True,False,3
+115,138,33,2021,19,Sergio Pérez,Red Bull,4,Random Forest,0,0,0.24,True,False,3
+113,138,31,2021,19,Lando Norris,McLaren,5,Random Forest,0,0,0.05,True,False,3
+109,138,24,2021,19,Charles Leclerc,Ferrari,6,Random Forest,0,0,0.20333333333333334,True,False,3
+105,138,11,2021,19,Pierre Gasly,AlphaTauri,7,Random Forest,0,0,0.09,True,False,3
+114,138,32,2021,19,Esteban Ocon,Alpine F1 Team,8,Random Forest,0,0,0.09666666666666666,True,False,3
+122,138,47,2021,19,Sebastian Vettel,Aston Martin,9,Random Forest,0,0,0.08333333333333333,True,False,3
+107,138,16,2021,19,Lewis Hamilton,Mercedes,10,Random Forest,1,0,0.23333333333333334,False,True,3
+117,138,36,2021,19,Daniel Ricciardo,McLaren,11,Random Forest,0,0,0.043333333333333335,True,False,3
+103,138,2,2021,19,Fernando Alonso,Alpine F1 Team,12,Random Forest,0,0,0.08333333333333333,True,False,3
+106,138,12,2021,19,Antonio Giovinazzi,Alfa Romeo,13,Random Forest,0,0,0.06666666666666667,True,False,3
+120,138,44,2021,19,Lance Stroll,Aston Martin,14,Random Forest,0,0,0.04666666666666667,True,False,3
+121,138,45,2021,19,Yuki Tsunoda,AlphaTauri,15,Random Forest,0,0,0.043333333333333335,True,False,3
+108,138,22,2021,19,Nicholas Latifi,Williams,16,Random Forest,0,0,0.07333333333333333,True,False,3
+118,138,39,2021,19,George Russell,Williams,17,Random Forest,0,0,0.07333333333333333,True,False,3
+112,138,29,2021,19,Mick Schumacher,Haas F1 Team,18,Random Forest,0,0,0.0,True,False,3
+111,138,28,2021,19,Nikita Mazepin,Haas F1 Team,19,Random Forest,0,0,0.08666666666666667,True,False,3
+140,162,45,2022,21,Yuki Tsunoda,AlphaTauri,0,Random Forest,0,0,0.17666666666666667,True,False,2
+137,162,39,2022,21,George Russell,Mercedes,1,Random Forest,1,0,0.3933333333333333,False,True,2
+127,162,16,2022,21,Lewis Hamilton,Mercedes,2,Random Forest,0,0,0.13666666666666666,True,False,2
+131,162,27,2022,21,Max Verstappen,Red Bull,3,Random Forest,0,0,0.12666666666666668,True,False,2
+135,162,33,2022,21,Sergio Pérez,Red Bull,4,Random Forest,0,0,0.10666666666666667,True,False,2
+130,162,24,2022,21,Charles Leclerc,Ferrari,5,Random Forest,0,0,0.13,True,False,2
+133,162,31,2022,21,Lando Norris,McLaren,6,Random Forest,0,0,0.006666666666666667,True,False,2
+138,162,40,2022,21,Carlos Sainz,Ferrari,7,Random Forest,0,0,0.28,True,False,2
+128,162,19,2022,21,Kevin Magnussen,Haas F1 Team,8,Random Forest,0,0,0.0,True,False,2
+141,162,47,2022,21,Sebastian Vettel,Aston Martin,9,Random Forest,0,0,0.0033333333333333335,True,False,2
+126,162,11,2022,21,Pierre Gasly,AlphaTauri,10,Random Forest,0,0,0.07333333333333333,True,False,2
+136,162,36,2022,21,Daniel Ricciardo,McLaren,11,Random Forest,0,0,0.006666666666666667,True,False,2
+132,162,29,2022,21,Mick Schumacher,Haas F1 Team,12,Random Forest,0,0,0.0033333333333333335,True,False,2
+142,162,49,2022,21,Guanyu Zhou,Alfa Romeo,13,Random Forest,0,0,0.0,True,False,2
+125,162,6,2022,21,Valtteri Bottas,Alfa Romeo,14,Random Forest,0,0,0.0,True,False,2
+139,162,44,2022,21,Lance Stroll,Aston Martin,15,Random Forest,0,0,0.01,True,False,2
+134,162,32,2022,21,Esteban Ocon,Alpine F1 Team,16,Random Forest,0,0,0.0,True,False,2
+124,162,2,2022,21,Fernando Alonso,Alpine F1 Team,17,Random Forest,0,0,0.02666666666666667,True,False,2
+129,162,22,2022,21,Nicholas Latifi,Williams,18,Random Forest,0,0,0.016666666666666666,True,False,2
+123,162,1,2022,21,Alexander Albon,Williams,19,Random Forest,0,0,0.03333333333333333,True,False,2
+151,183,27,2023,20,Max Verstappen,Red Bull,1,Random Forest,1,0,0.43666666666666665,False,True,1
+150,183,24,2023,20,Charles Leclerc,Ferrari,2,Random Forest,0,0,0.02666666666666667,True,False,1
+160,183,44,2023,20,Lance Stroll,Aston Martin,3,Random Forest,0,0,0.09666666666666666,True,False,1
+144,183,2,2023,20,Fernando Alonso,Aston Martin,4,Random Forest,0,0,0.08666666666666667,True,False,1
+147,183,16,2023,20,Lewis Hamilton,Mercedes,5,Random Forest,0,0,0.08666666666666667,True,False,1
+152,183,31,2023,20,Lando Norris,McLaren,6,Random Forest,0,0,0.13,True,False,1
+158,183,40,2023,20,Carlos Sainz,Ferrari,7,Random Forest,0,0,0.09333333333333334,True,False,1
+157,183,39,2023,20,George Russell,Mercedes,8,Random Forest,0,0,0.006666666666666667,True,False,1
+154,183,33,2023,20,Sergio Pérez,Red Bull,9,Random Forest,0,0,0.11,True,False,1
+155,183,34,2023,20,Oscar Piastri,McLaren,10,Random Forest,0,0,0.01,True,False,1
+148,183,17,2023,20,Nico Hülkenberg,Haas F1 Team,11,Random Forest,0,0,0.01,True,False,1
+149,183,19,2023,20,Kevin Magnussen,Haas F1 Team,12,Random Forest,0,0,0.006666666666666667,True,False,1
+143,183,1,2023,20,Alexander Albon,Williams,13,Random Forest,0,0,0.006666666666666667,True,False,1
+153,183,32,2023,20,Esteban Ocon,Alpine F1 Team,14,Random Forest,0,0,0.006666666666666667,True,False,1
+146,183,11,2023,20,Pierre Gasly,Alpine F1 Team,15,Random Forest,0,0,0.09666666666666666,True,False,1
+161,183,45,2023,20,Yuki Tsunoda,AlphaTauri,16,Random Forest,0,0,0.10333333333333333,True,False,1
+156,183,36,2023,20,Daniel Ricciardo,AlphaTauri,17,Random Forest,0,0,0.01,True,False,1
+145,183,6,2023,20,Valtteri Bottas,Alfa Romeo,18,Random Forest,0,0,0.013333333333333334,True,False,1
+159,183,41,2023,20,Logan Sargeant,Williams,19,Random Forest,0,0,0.006666666666666667,True,False,1
+162,183,49,2023,20,Guanyu Zhou,Alfa Romeo,20,Random Forest,0,0,0.013333333333333334,True,False,1

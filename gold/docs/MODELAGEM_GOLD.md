@@ -1,14 +1,32 @@
 # Modelagem da Camada Gold — Formula 1 / Interlagos
 
+> **Documento técnico da camada Gold.**
+>
+> Este documento consolida a arquitetura definitiva, granularidades, regras de transformação, rastreabilidade com o EDA, prevenção de fan-out, política de SCD, validações e critérios de qualidade da camada Gold.
+>
+> A Gold é construída a partir da Silver já tratada. Portanto, não repete limpeza, padronização ou tipagem que já foram realizadas na Silver.
+
+---
+
 ## 1. Objetivo
 
-A Gold transforma a Silver já tratada em um modelo analítico dimensional e reutilizável. A Silver permanece como fonte de dados preparada; a Gold não repete limpeza, padronização ou tipagem.
+A Gold transforma a Silver em um modelo analítico dimensional e reutilizável.
 
-A arquitetura final é **3 dimensões + 5 fatos**, com `fct_piloto_corrida` como fato central. Essa decisão é definitiva na revisão arquitetural.
+A arquitetura final é:
 
-## 2. Fontes
+```text
+3 dimensões + 5 fatos
+```
 
-Datasets Silver utilizados:
+com `fct_piloto_corrida` como fato central.
+
+Essa decisão é definitiva para o projeto.
+
+---
+
+# 2. Fontes Silver
+
+Datasets utilizados:
 
 - `calendario`
 - `resultados`
@@ -18,37 +36,47 @@ Datasets Silver utilizados:
 - `clima`
 - `driver_mapping`
 
-A especificação define o EDA como fonte de requisitos da Gold e lista essas fontes Silver como os datasets do projeto.
+A EDA é utilizada como fonte dos requisitos analíticos da Gold.
 
-## 3. Arquitetura
+---
 
-```text
-                         ┌─────────────────┐
-                         │  dim_corrida    │
-                         │ PK race_key     │
-                         └────────┬────────┘
-                                  │
-              ┌───────────────────┼─────────────────────┐
-              │                   │                     │
-              ▼                   ▼                     ▼
-┌────────────────────┐ ┌────────────────────┐ ┌──────────────────┐
-│ fct_piloto_corrida │ │    fct_voltas      │ │  fct_pit_stops   │
-│ PK pilot_race_key  │ │ race_key,driver_key│ │ race_key,driver_key│
-└─────────┬──────────┘ └────────────────────┘ └──────────────────┘
-          │
-          │
-          ▼
-┌────────────────────┐       ┌────────────────────┐
-│    fct_stints      │       │    fct_clima       │
-└────────────────────┘       └────────────────────┘
+# 3. Arquitetura definitiva
 
- dim_piloto ───────► fatos de piloto
- dim_equipe ───────► fct_piloto_corrida
-```
+### Dimensões
 
-A revisão definitiva mantém `dim_corrida`, `dim_piloto`, `dim_equipe` e os cinco fatos, removendo estruturas paralelas como `fct_resultados` e `fct_pneus`.
+- `dim_corrida`
+- `dim_piloto`
+- `dim_equipe`
 
-## 4. Granularidades
+### Fatos
+
+- `fct_piloto_corrida`
+- `fct_voltas`
+- `fct_pit_stops`
+- `fct_stints`
+- `fct_clima`
+
+O `fct_piloto_corrida` é o fato central.
+
+---
+
+# 4. Estruturas deliberadamente não criadas
+
+| Estrutura | Motivo |
+|---|---|
+| `fct_resultados` | teria o mesmo grão de `fct_piloto_corrida`; resultado e desempenho ficam no fato central |
+| `fct_pneus` | a estratégia de pneus é representada por `fct_stints` |
+| `dim_temporada` | `season` permanece como atributo de `dim_corrida` |
+| `dim_composto` | não necessária ao escopo atual |
+| `dim_status` | não necessária ao escopo atual |
+| `dim_circuito` | o projeto possui escopo exclusivo em Interlagos |
+| SCD Type 2 | não necessário ao objetivo e à natureza histórica do projeto |
+
+A ausência dessas estruturas é uma decisão explícita de modelagem.
+
+---
+
+# 5. Granularidades
 
 | Tabela | Granularidade |
 |---|---|
@@ -61,86 +89,135 @@ A revisão definitiva mantém `dim_corrida`, `dim_piloto`, `dim_equipe` e os cin
 | `fct_stints` | 1 piloto × 1 corrida × 1 stint |
 | `fct_clima` | 1 medição climática |
 
-A especificação exige que cada tabela tenha granularidade explícita e que diferentes granularidades não sejam misturadas sem justificativa.
+Cada tabela possui um grão explícito.
 
-## 5. Regra de consumo da Silver
+Fatos com diferentes granularidades não devem ser combinados diretamente sem agregação prévia e justificativa.
 
-### O que permanece igual
+---
 
-Os atributos Silver são selecionados diretamente quando não há transformação analítica necessária. Não são feitos `TRIM`, `CAST`, conversões de datas/horários ou novas padronizações na Gold.
+# 6. Regra de consumo da Silver
 
-Exemplo em `fct_clima`:
+Os atributos da Silver são selecionados diretamente quando não existe transformação analítica necessária.
+
+A Gold não repete:
+
+- `TRIM`;
+- `CAST` de atributos de origem;
+- conversões de datas;
+- conversões de horários;
+- limpeza de valores;
+- padronizações já realizadas na Silver.
+
+### CASTs
+
+Os CASTs existentes são somente de contagens derivadas:
 
 ```sql
-c.weather_time_seconds,
-c.air_temp,
-c.track_temp,
-c.humidity,
-c.pressure,
-c.wind_speed,
-c.rainfall,
-c.wind_direction,
-c.event_date,
-c.session,
-c.session_name
+COUNT(*)::INTEGER
+COUNT(DISTINCT ...)::INTEGER
 ```
 
-### CASTs realmente utilizados
+Isso não representa uma re-tipagem de atributos da Silver.
 
-Os modelos não fazem CAST dos atributos de origem. Os únicos CASTs presentes são de **contagens derivadas**:
+As chaves técnicas criadas com `ROW_NUMBER()` já produzem identificadores inteiros adequados.
 
-- `COUNT(*)::INTEGER`
-- `COUNT(DISTINCT ...)::INTEGER`
+---
 
-Isso ocorre porque `COUNT` em DuckDB produz uma contagem inteira própria do agregado, enquanto a especificação Gold define essas medidas como `INTEGER`. Não é uma re-tipagem de coluna Silver.
+# 7. Dimensões
 
-As chaves técnicas criadas com `ROW_NUMBER()` não precisam de CAST: o próprio resultado do window function já fornece o identificador inteiro adequado ao papel de chave.
+## 7.1 `dim_corrida`
 
-## 6. Dimensões
+**Origem:** `silver_calendario`
 
-### 6.1 dim_corrida
+**PK:** `race_key`
 
-**Origem:** `silver_calendario`.
+**Natural key:**
 
-**PK:** `race_key`.
+```text
+season + round
+```
 
-**Natural key:** `season + round`.
+A dimensão contém os atributos necessários para contextualização da corrida e do circuito.
 
-A dimensão contém os atributos de corrida e circuito necessários para contextualização. `season` permanece como atributo de `dim_corrida`; não existe `dim_temporada`. A revisão final confirma essa decisão.
+`season` permanece em `dim_corrida`; não existe `dim_temporada`.
 
-A única operação adicional é garantir uma linha por `season + round`, requisito de modelagem da dimensão. Não há limpeza ou re-tipagem.
+A modelagem garante uma linha por `season + round`.
 
-### 6.2 dim_piloto
+---
 
-**Origem:** `silver_resultados`.
+## 7.2 `dim_piloto`
 
-**PK:** `driver_key`.
+**Origem:** `silver_resultados`
 
-**Natural key:** `driver_id`.
+**PK:** `driver_key`
 
-É Type 1. A agregação por `driver_id` consolida a entidade em uma única linha, usando os atributos disponíveis na Silver. Isso é modelagem da dimensão, não uma nova etapa de limpeza.
+**Natural key:** `driver_id`
 
-### 6.3 dim_equipe
+**SCD:** Type 1
 
-**Origem:** `silver_resultados`.
+A dimensão consolida a entidade piloto em uma linha por `driver_id`, utilizando os atributos disponíveis na Silver.
 
-**PK:** `team_key`.
+---
 
-**Natural key:** `constructor_id`.
+## 7.3 `dim_equipe`
 
-É Type 1 e representa a entidade equipe/construtor. Não há dimensão adicional de circuito, temporada ou status.
+**Origem:** `silver_resultados`
 
-## 7. fct_piloto_corrida
+**PK:** `team_key`
 
-**Grão:** 1 piloto em 1 corrida.
+**Natural key:** `constructor_id`
 
-**PK técnica:** `pilot_race_key`.
+**SCD:** Type 1
 
-**FKs:** `race_key`, `driver_key`, `team_key`.
+A dimensão representa a entidade equipe/construtor.
 
-**Origem:** `silver_resultados` + agregações de `voltas`, `pit_stops` e `pneus`.
+---
 
-Campos finais:
+# 8. Política de SCD
+
+| Dimensão | Estratégia |
+|---|---|
+| `dim_corrida` | Sem SCD |
+| `dim_piloto` | Type 1 |
+| `dim_equipe` | Type 1 |
+
+Não é utilizada estratégia SCD Type 2 neste projeto.
+
+---
+
+# 9. `fct_piloto_corrida`
+
+**Grão:**
+
+```text
+1 piloto × 1 corrida
+```
+
+**PK técnica:** `pilot_race_key`
+
+**FKs:**
+
+```text
+race_key
+driver_key
+team_key
+```
+
+**Origem:**
+
+```text
+silver_resultados
++
+agregação de voltas
++
+agregação de pit_stops
++
+estratégia de pneus reconstruída em fct_stints
+```
+
+A fonte `pneus` participa indiretamente por meio da reconstrução de `fct_stints`.
+
+## 9.1 Campos finais
 
 ```text
 pilot_race_key
@@ -153,7 +230,6 @@ status
 points
 laps
 race_time
-race_time_millis
 posicoes_ganhas
 ritmo_representativo_pct
 voltas_analisadas
@@ -166,30 +242,65 @@ qtd_stints
 qtd_compostos_distintos
 ```
 
-A arquitetura final escolheu esse fato em vez de um `fct_resultados` separado porque ambos teriam o mesmo grão piloto-corrida; o fato central incorpora resultado e desempenho.
+> `race_time_millis` não faz parte do schema final documentado.
 
-### Prevenção de fan-out
+## 9.2 Ganho/perda de posições
 
-As fontes de detalhes são agregadas separadamente:
+Quando `grid` e `position` são válidos:
+
+```text
+posicoes_ganhas = grid - position
+```
+
+A variável é derivada do resultado e não deve ser utilizada como feature explicativa em um modelo cujo objetivo seja explicar a vitória.
+
+---
+
+# 10. Prevenção de fan-out
+
+As fontes detalhadas são agregadas independentemente:
 
 ```text
 resultados → piloto-corrida
 voltas     → piloto-corrida
 pit_stops  → piloto-corrida
 stints     → piloto-corrida
-                      ↓
-               joins 1:1 por piloto-corrida
+                    ↓
+             joins 1:1 por
+              piloto-corrida
 ```
 
-Não é feito `resultados JOIN voltas JOIN pit_stops JOIN stints` no detalhe.
+Não deve ser realizado:
 
-## 8. fct_voltas
+```text
+resultados
+    JOIN voltas
+    JOIN pit_stops
+    JOIN stints
+```
 
-**Grão:** 1 piloto × 1 corrida × 1 volta.
+mantendo as linhas detalhadas.
 
-**FKs:** `race_key`, `driver_key`.
+Essa regra evita multiplicação de registros e distorção de métricas.
 
-Campos finais:
+---
+
+# 11. `fct_voltas`
+
+**Grão:**
+
+```text
+1 piloto × 1 corrida × 1 volta
+```
+
+**FKs:**
+
+```text
+race_key
+driver_key
+```
+
+## 11.1 Campos finais
 
 ```text
 race_key
@@ -202,7 +313,7 @@ evento_coletivo_extremo
 volta_comparavel
 ```
 
-Os intermediários metodológicos não são persistidos:
+## 11.2 Intermediários não persistidos
 
 ```text
 delta_mediana_pct
@@ -210,36 +321,89 @@ delta_volta_pct
 delta_contexto_volta_pct
 ```
 
-Eles existem apenas durante o cálculo do ritmo.
+Esses campos são utilizados durante o cálculo analítico, mas não precisam ser persistidos.
 
-## 9. Metodologia de ritmo do EDA
+---
 
-A implementação preserva a sequência analítica definida:
+# 12. Metodologia de ritmo
 
-1. mediana do tempo de volta da corrida;
-2. mediana por volta dentro da corrida;
-3. identificação de voltas com pit stop;
-4. identificação de eventos coletivos extremos quando `delta_contexto_volta_pct > 100`;
-5. definição de `volta_comparavel` como volta sem pit stop e sem evento coletivo extremo;
-6. mediana de referência das voltas comparáveis por corrida e volta;
-7. `delta_ritmo_pct = lap_time_seconds / mediana_volta_comparavel - 1`, em percentual;
-8. mediana do delta por piloto-corrida como `ritmo_representativo_pct`;
-9. `voltas_analisadas` = quantidade de voltas comparáveis analisadas;
-10. `voltas_disponiveis` = quantidade de registros reais de `silver_voltas`;
-11. `cobertura_ritmo_pct = voltas_analisadas / voltas_disponiveis × 100`;
-12. `amostra_reduzida = voltas_analisadas < 20`.
+A implementação preserva a sequência definida na EDA:
 
-O cálculo é analítico e, portanto, pertence à Gold; não é uma nova limpeza da Silver.
+1. calcular a mediana do tempo de volta da corrida;
+2. calcular a mediana por volta dentro da corrida;
+3. identificar voltas com pit stop;
+4. identificar eventos coletivos extremos quando `delta_contexto_volta_pct > 100`;
+5. definir `volta_comparavel` como volta sem pit stop e sem evento coletivo extremo;
+6. calcular a mediana de referência das voltas comparáveis;
+7. calcular:
 
-## 10. fct_pit_stops
+```text
+delta_ritmo_pct =
+lap_time_seconds / mediana_volta_comparavel - 1
+```
 
-**Grão:** 1 pit stop.
+8. calcular a mediana do delta por piloto-corrida:
 
-**PK natural:** `season + round + driver_id + stop`.
+```text
+ritmo_representativo_pct
+```
 
-**FKs:** `race_key`, `driver_key`.
+9. calcular:
 
-Campos:
+```text
+voltas_analisadas
+```
+
+como a quantidade de voltas comparáveis;
+
+10. calcular:
+
+```text
+voltas_disponiveis
+```
+
+como a quantidade real de registros de `silver_voltas`;
+
+11. calcular:
+
+```text
+cobertura_ritmo_pct =
+voltas_analisadas / voltas_disponiveis × 100
+```
+
+12. classificar:
+
+```text
+amostra_reduzida =
+voltas_analisadas < 20
+```
+
+O cálculo é uma transformação analítica da Gold e não uma nova limpeza da Silver.
+
+---
+
+# 13. `fct_pit_stops`
+
+**Grão:**
+
+```text
+1 pit stop
+```
+
+**PK natural:**
+
+```text
+season + round + driver_id + stop
+```
+
+**FKs:**
+
+```text
+race_key
+driver_key
+```
+
+## 13.1 Campos
 
 ```text
 race_key
@@ -251,17 +415,41 @@ pit_stop_convencional
 pit_stop_extremo
 ```
 
-A duração `duration` da Silver é consumida diretamente como `duration_seconds`, pois a Silver já fez a conversão para segundos. A especificação define `duration_seconds <= 60` como convencional e `> 60` como extremo, sem remover os extremos.
+A duração da Silver é consumida diretamente como `duration_seconds`.
 
-## 11. fct_stints
+Classificação:
 
-**Grão:** 1 piloto × 1 corrida × 1 stint.
+```text
+duration_seconds <= 60 → convencional
+duration_seconds > 60  → extremo
+```
 
-**PK natural:** `season + round + driver_id + stint_number`.
+Pit stops extremos permanecem preservados e não são tratados automaticamente como erros.
 
-**FKs:** `race_key`, `driver_key`.
+---
 
-Campos:
+# 14. `fct_stints`
+
+**Grão:**
+
+```text
+1 piloto × 1 corrida × 1 stint
+```
+
+**PK natural:**
+
+```text
+season + round + driver_id + stint_number
+```
+
+**FKs:**
+
+```text
+race_key
+driver_key
+```
+
+## 14.1 Campos
 
 ```text
 race_key
@@ -273,21 +461,43 @@ tyre_life_inicial
 tyre_life_final
 ```
 
-A Silver `pneus` contém registros por volta e sessão. Como o grão aprovado é corrida, a transformação seleciona explicitamente `session = 'R'` (Race), depois usa `driver_mapping` para compatibilizar o identificador FastF1 com o identificador Jolpica usado nas demais fontes.
+A fonte `pneus` contém registros por volta e sessão.
 
-A reconstrução agrupa por piloto e stint. `voltas_observadas` é `COUNT(DISTINCT lap_number)`; não é calculada por diferença de `tyre_life`. A especificação destaca explicitamente essa distinção.
+A transformação:
 
-Se um mesmo stint apresentar mais de um composto, isso é tratado como inconsistência de modelagem e deve reprovar a validação, em vez de escolher arbitrariamente um valor.
+1. seleciona explicitamente `session = 'R'`;
+2. utiliza `driver_mapping` para compatibilizar os identificadores FastF1 e Jolpica;
+3. reconstrói os stints por piloto.
 
-## 12. fct_clima
+### `voltas_observadas`
 
-**Grão:** 1 medição climática em um instante da sessão.
+```text
+COUNT(DISTINCT lap_number)
+```
 
-**PK técnica:** `weather_key`.
+Representa as voltas efetivamente observadas no stint.
 
-**FK:** `race_key`.
+Não deve ser confundida com `tyre_life`.
 
-Campos principais:
+### Consistência
+
+Se um mesmo stint apresentar mais de um composto, isso deve ser tratado como inconsistência e reprovar a validação, em vez de escolher arbitrariamente um valor.
+
+---
+
+# 15. `fct_clima`
+
+**Grão:**
+
+```text
+1 medição climática em um instante da sessão
+```
+
+**PK técnica:** `weather_key`
+
+**FK:** `race_key`
+
+## 15.1 Campos
 
 ```text
 weather_key
@@ -305,13 +515,35 @@ session
 session_name
 ```
 
-Todos os atributos climáticos são selecionados diretamente da Silver.
+Os atributos climáticos são selecionados diretamente da Silver.
 
-Não existe relação volta → clima. O EDA informa que `weather_time_seconds` é relativo à sessão e não há alinhamento temporal direto com as voltas.
+## 15.2 Independência temporal
 
-Também não existe join direto de `fct_piloto_corrida` com `fct_clima`, pois isso multiplicaria uma linha piloto-corrida por todas as medições climáticas. Para gerar contexto climático de uma corrida, primeiro deve-se agregar `fct_clima` por `race_key`.
+Não existe relação confirmada entre uma medição climática e uma volta específica.
 
-## 13. PKs e FKs
+`weather_time_seconds` é relativo à sessão e não possui alinhamento temporal direto com as voltas utilizadas.
+
+Portanto:
+
+```text
+fct_clima
+```
+
+permanece independente de `fct_voltas`.
+
+Para gerar contexto climático no nível de corrida, primeiro deve-se agregar:
+
+```text
+fct_clima → race_key
+```
+
+e somente depois associar o resultado a `fct_piloto_corrida`.
+
+Não deve ser realizado join direto das medições climáticas com o fato central.
+
+---
+
+# 16. PKs e FKs
 
 | Tabela | PK | FKs |
 |---|---|---|
@@ -319,91 +551,136 @@ Também não existe join direto de `fct_piloto_corrida` com `fct_clima`, pois is
 | `dim_piloto` | `driver_key` | — |
 | `dim_equipe` | `team_key` | — |
 | `fct_piloto_corrida` | `pilot_race_key` | `race_key`, `driver_key`, `team_key` |
-| `fct_voltas` | natural: `race_key + driver_key + lap` | `race_key`, `driver_key` |
-| `fct_pit_stops` | natural: `race_key + driver_key + stop` | `race_key`, `driver_key` |
-| `fct_stints` | natural: `race_key + driver_key + stint_number` | `race_key`, `driver_key` |
+| `fct_voltas` | `race_key + driver_key + lap` | `race_key`, `driver_key` |
+| `fct_pit_stops` | `race_key + driver_key + stop` | `race_key`, `driver_key` |
+| `fct_stints` | `race_key + driver_key + stint_number` | `race_key`, `driver_key` |
 | `fct_clima` | `weather_key` | `race_key` |
 
-## 14. Rastreabilidade EDA → Gold
+---
 
-| Regra/requisito do EDA | Implementação | Gold | Resultado |
-|---|---|---|---|
-| Grão piloto-corrida | agregação antes dos joins | `fct_piloto_corrida` | 1 linha por piloto-corrida |
-| Ganho/perda de posições | `grid - position` | `fct_piloto_corrida` | `posicoes_ganhas` |
-| Mediana de contexto da corrida | window por corrida | `fct_voltas` / transformação | intermediário |
-| Evento coletivo extremo | `delta_contexto_volta_pct > 100` | `fct_voltas` | `evento_coletivo_extremo` |
-| Volta comparável | sem pit stop e sem evento extremo | `fct_voltas` | `volta_comparavel` |
-| Delta de ritmo | comparação com mediana da volta comparável | `fct_voltas` | `delta_ritmo_pct` |
-| Ritmo representativo | mediana do delta por piloto-corrida | `fct_piloto_corrida` | `ritmo_representativo_pct` |
-| Cobertura de ritmo | analisadas / disponíveis × 100 | `fct_piloto_corrida` | `cobertura_ritmo_pct` |
-| Amostra reduzida | analisadas < 20 | `fct_piloto_corrida` | `amostra_reduzida` |
-| Voltas disponíveis | COUNT de registros Silver.voltas | `fct_piloto_corrida` | `voltas_disponiveis` |
-| Pit stop convencional | duração <= 60 | `fct_pit_stops` | `pit_stop_convencional` |
-| Pit stop extremo | duração > 60 | `fct_pit_stops` | `pit_stop_extremo` |
-| Preservação dos extremos | nenhuma remoção | `fct_pit_stops` | todos os stops permanecem |
-| Reconstrução de stint | agrupamento por stint na sessão Race | `fct_stints` | 1 piloto-corrida-stint |
-| Voltas observadas do stint | COUNT DISTINCT lap_number | `fct_stints` | `voltas_observadas` |
-| Vida inicial/final | MIN/MAX tyre_life | `fct_stints` | campos separados |
-| Clima independente de voltas | sem join por lap | `fct_clima` | medição climática preservada |
-| Clima como contexto de corrida | FK para corrida | `fct_clima` | `race_key` |
+# 17. Rastreabilidade EDA → Gold
 
-A especificação reforça que o EDA deve ser usado como fonte de requisitos e que as métricas precisam ser mapeadas para a Gold.
+| Regra/requisito | Implementação | Gold |
+|---|---|---|
+| Grão piloto-corrida | agregação antes dos joins | `fct_piloto_corrida` |
+| Ganho/perda de posições | `grid - position` | `fct_piloto_corrida` |
+| Evento coletivo extremo | `delta_contexto_volta_pct > 100` | `fct_voltas` |
+| Volta comparável | sem pit stop e sem evento extremo | `fct_voltas` |
+| Delta de ritmo | comparação com referência comparável | `fct_voltas` |
+| Ritmo representativo | mediana por piloto-corrida | `fct_piloto_corrida` |
+| Voltas analisadas | COUNT de voltas comparáveis | `fct_piloto_corrida` |
+| Voltas disponíveis | COUNT de registros reais | `fct_piloto_corrida` |
+| Cobertura de ritmo | analisadas / disponíveis × 100 | `fct_piloto_corrida` |
+| Amostra reduzida | analisadas < 20 | `fct_piloto_corrida` |
+| Pit stop convencional | duração <= 60s | `fct_pit_stops` |
+| Pit stop extremo | duração > 60s | `fct_pit_stops` |
+| Preservação dos extremos | nenhuma remoção | `fct_pit_stops` |
+| Reconstrução de stint | sessão Race + agrupamento por stint | `fct_stints` |
+| Voltas observadas | COUNT DISTINCT de voltas | `fct_stints` |
+| Vida inicial/final | MIN/MAX de tyre_life | `fct_stints` |
+| Clima independente | sem join por volta | `fct_clima` |
+| Clima como contexto | agregação por `race_key` antes do join | `fct_clima` |
 
-## 15. Prevenção de fan-out
+---
 
-As regras principais são:
+# 18. Valores ausentes
 
-- `fct_piloto_corrida` nunca recebe join direto com `silver_voltas`, `silver_pit_stops` ou `silver_pneus` no detalhe;
-- cada fonte detalhada é agregada independentemente para piloto-corrida;
-- `fct_clima` permanece independente;
-- `fct_stints` já chega ao grão piloto-corrida-stint antes de ser associado ao fato central;
-- joins finais do fato central ocorrem em chaves de granularidade 1:1.
+A Gold não realiza imputação genérica.
 
-## 16. Valores ausentes
+Valores nulos semanticamente válidos da Silver são preservados quando não impedem a construção da métrica.
 
-A Gold não faz imputação genérica. Valores nulos válidos da Silver são preservados quando não impedem a métrica específica. Essa postura evita transformar ausência real em informação inventada.
-
-## 17. Qualidade e validações
-
-O `build_gold.py` valida:
-
-- unicidade das chaves das dimensões;
-- unicidade do grão piloto-corrida;
-- unicidade do grão piloto-volta;
-- unicidade do grão pit stop;
-- unicidade do grão stint;
-- unicidade da chave climática;
-- FKs de corrida e piloto;
-- classificação correta dos pit stops;
-- limites de cobertura de ritmo;
-- `voltas_analisadas <= voltas_disponiveis`;
-- consistência dos stints;
-- ausência de múltiplos compostos dentro de um mesmo stint.
-
-Os testes estáticos também verificam que os modelos não introduzem CASTs nos atributos climáticos, de voltas, pit stops ou stints e que a arquitetura contém exatamente 3 dimensões e 5 fatos.
-
-## 18. Materialização
-
-DuckDB é usado como motor de leitura, transformação e validação. Depois das validações, cada view Gold é materializada como Parquet no MinIO, diretamente sob:
+Exemplo:
 
 ```text
-s3://f1-data-lake/gold/
+ausência de pit stop convencional
+≠
+duração = 0
 ```
 
-Não é criada uma segunda Silver nem são sobrescritos os Parquets Silver.
+A finalidade é evitar transformar ausência real em informação artificial.
 
+---
 
-## 19. Validação executada no ambiente do projeto
+# 19. Qualidade e validações
 
-A Gold foi executada e validada no ambiente local do projeto, utilizando DuckDB e MinIO.
+As validações devem contemplar:
 
-Foram realizadas as seguintes validações:
+### Dimensões
 
-- construção e materialização da Gold com `build_gold.py`;
-- validação estrutural com `validate_gold.py`;
-- testes automatizados com `pytest gold/tests`.
-- validação analítica comparando as métricas da Gold com os resultados definidos no EDA `teste_validacao_gold.py`;
-Principais resultados da validação analítica :
+- unicidade das PKs;
+- unicidade das natural keys;
+- consistência dos atributos.
+
+### Fatos
+
+- unicidade do grão;
+- integridade das FKs;
+- ausência de fan-out;
+- consistência das métricas.
+
+### Ritmo
+
+- `voltas_analisadas <= voltas_disponiveis`;
+- cobertura dentro dos limites esperados;
+- consistência de `volta_comparavel`;
+- consistência de eventos extremos;
+- reconciliação de `ritmo_representativo_pct`.
+
+### Pit stops
+
+- classificação correta dos stops;
+- preservação dos stops extremos;
+- duração válida quando aplicável.
+
+### Stints
+
+- unicidade do stint;
+- sequência dos stints;
+- consistência do composto;
+- coerência de `voltas_observadas`;
+- ausência de múltiplos compostos dentro de um mesmo stint.
+
+### Clima
+
+- unicidade da chave climática;
+- FK válida para corrida;
+- preservação das medições.
+
+---
+
+# 20. Separação entre validações de construção e testes
+
+As garantias da Gold são distribuídas entre diferentes mecanismos.
+
+## `build_gold.py`
+
+Responsável pela construção das views/materializações e pelas validações executadas durante o processo de build.
+
+## `validate_gold.py`
+
+Responsável pelas validações estruturais e de integridade da Gold materializada.
+
+## `teste_validacao_gold.py`
+
+Responsável pela validação analítica e reconciliação das métricas da Gold com os resultados/metodologias definidos no EDA.
+
+## `test_gold.py`
+
+Responsável pelos testes automatizados das regras críticas da Gold.
+
+## `test_sql_contract.py`
+
+Responsável pelos contratos estruturais dos SQLs, incluindo arquitetura, relações esperadas e proteção contra alterações indevidas.
+
+Essa separação evita atribuir a um único script responsabilidades que pertencem ao conjunto de validações.
+
+---
+
+# 21. Rastreabilidade e reconciliação
+
+A Gold foi comparada com as regras e resultados definidos na EDA.
+
+Principais resultados:
 
 - 202 registros piloto-corrida;
 - 12.589 voltas disponíveis;
@@ -413,9 +690,164 @@ Principais resultados da validação analítica :
 - 70 pit stops extremos;
 - 468 stints;
 - nenhuma duplicidade no grão piloto-corrida;
-- nenhum valor inválido identificado nas métricas validadas;
-- nenhuma divergência entre o ritmo recalculado a partir de `fct_voltas` e `ritmo_representativo_pct` do fato central;
-- nenhuma divergência em `voltas_analisadas` ou `voltas_disponiveis`;
-- 8 testes automatizados passando com `pytest`.
+- nenhuma divergência na reconciliação do ritmo;
+- nenhuma divergência em `voltas_analisadas`;
+- nenhuma divergência em `voltas_disponiveis`;
+- 8 testes automatizados passando.
 
-A validação confirmou a consistência da implementação da Gold com as regras metodológicas definidas no EDA e com a modelagem arquitetural aprovada.
+Esses resultados demonstram a aderência da implementação às regras analíticas utilizadas como requisito.
+
+---
+
+# 22. Contratos arquiteturais
+
+Os testes de contrato devem proteger, no mínimo:
+
+- existência das 3 dimensões;
+- existência dos 5 fatos;
+- ausência de estruturas arquiteturais descartadas;
+- granularidades esperadas;
+- relações entre fatos e dimensões;
+- independência de `fct_clima` em relação a piloto e volta;
+- ausência de CASTs indevidos sobre atributos de origem;
+- preservação das regras críticas de pit stops e stints.
+
+---
+
+# 23. Materialização
+
+DuckDB é utilizado como motor de leitura, transformação e validação.
+
+Após as validações, as estruturas Gold são materializadas como Parquet no MinIO:
+
+```text
+s3://f1-data-lake/gold/
+```
+
+Arquivos:
+
+```text
+dim_corrida.parquet
+dim_piloto.parquet
+dim_equipe.parquet
+
+fct_piloto_corrida.parquet
+fct_voltas.parquet
+fct_pit_stops.parquet
+fct_stints.parquet
+fct_clima.parquet
+```
+
+A Gold não cria uma segunda Silver e não altera os Parquets da Silver.
+
+---
+
+# 24. Checklist de critérios da Gold
+
+## Arquitetura
+
+- [x] Arquitetura dimensional definida
+- [x] 3 dimensões
+- [x] 5 fatos
+- [x] Fato central definido
+- [x] Estruturas deliberadamente não criadas documentadas
+
+## Modelagem
+
+- [x] Granularidade explícita
+- [x] PKs definidas
+- [x] FKs definidas
+- [x] Natural keys definidas
+- [x] Política de SCD definida
+- [x] Ausência de SCD Type 2 documentada
+
+## Transformações
+
+- [x] Separação entre limpeza Silver e transformação Gold
+- [x] Metodologia de ritmo documentada
+- [x] Pit stops classificados
+- [x] Pit stops extremos preservados
+- [x] Stints reconstruídos
+- [x] `voltas_observadas` diferenciada de `tyre_life`
+- [x] Clima mantido independente
+- [x] Regra de agregação do clima documentada
+- [x] Nulos semanticamente válidos preservados
+
+## Integridade
+
+- [x] Prevenção de fan-out
+- [x] Agregações independentes
+- [x] Joins finais em granularidade compatível
+- [x] Unicidade das chaves
+- [x] Integridade referencial
+- [x] Consistência dos grãos
+
+## Rastreabilidade
+
+- [x] Regras do EDA mapeadas para a Gold
+- [x] Métricas de ritmo reconciliadas
+- [x] Voltas disponíveis reconciliadas
+- [x] Voltas analisadas reconciliadas
+- [x] Pit stops reconciliados
+- [x] Stints reconciliados
+
+## Qualidade
+
+- [x] Validação estrutural
+- [x] Validação analítica
+- [x] Testes automatizados
+- [x] Contratos SQL
+- [x] Materialização em Parquet
+- [x] Persistência no MinIO
+
+---
+
+# 25. Regra de manutenção
+
+Este documento deve permanecer alinhado ao fluxo:
+
+```text
+EDA
+ ↓
+Silver
+ ↓
+Gold
+ ↓
+ML
+```
+
+Caso uma decisão arquitetural seja alterada, a mudança deve ser refletida:
+
+1. neste documento;
+2. nos SQLs correspondentes;
+3. nos testes;
+4. nas validações;
+5. nos artefatos materializados.
+
+A Gold não deve ser modificada apenas para atender uma necessidade específica da camada ML sem avaliar o impacto sobre o modelo analítico já definido.
+
+---
+
+# 26. Status da camada Gold
+
+```text
+Arquitetura       ✓
+Dimensões         ✓
+Fatos             ✓
+Granularidade     ✓
+Transformações    ✓
+Ritmo             ✓
+Pit Stops         ✓
+Stints/Pneus      ✓
+Clima             ✓
+PK/FK             ✓
+SCD               ✓
+Fan-out           ✓
+Qualidade         ✓
+Validação EDA     ✓
+Testes            ✓
+Contratos SQL     ✓
+MinIO             ✓
+```
+
+**Status: camada Gold modelada, materializada e validada para o escopo atual do projeto.**

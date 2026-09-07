@@ -1,0 +1,16 @@
+modelo,race_key,season,vencedor_real,vencedor_predito_por_probabilidade,probabilidade_do_vencedor_real,ranking_do_vencedor_real,acertou_vencedor_por_maior_probabilidade
+Logistic Regression,80,2018,Lewis Hamilton,Max Verstappen,0.7666484939597767,4.0,False
+Logistic Regression,101,2019,Max Verstappen,Max Verstappen,0.9903787597104983,1.0,True
+Logistic Regression,138,2021,Lewis Hamilton,Max Verstappen,0.7820198424797024,6.0,False
+Logistic Regression,162,2022,George Russell,George Russell,0.27357939133763526,1.0,True
+Logistic Regression,183,2023,Max Verstappen,Max Verstappen,0.2345698259992267,1.0,True
+Decision Tree,80,2018,Lewis Hamilton,Lewis Hamilton,1.0,1.0,True
+Decision Tree,101,2019,Max Verstappen,Max Verstappen,1.0,1.0,True
+Decision Tree,138,2021,Lewis Hamilton,Valtteri Bottas,0.0,2.0,False
+Decision Tree,162,2022,George Russell,Yuki Tsunoda,0.0,1.0,False
+Decision Tree,183,2023,Max Verstappen,Max Verstappen,0.0,1.0,True
+Random Forest,80,2018,Lewis Hamilton,Sebastian Vettel,0.49666666666666665,2.0,False
+Random Forest,101,2019,Max Verstappen,Max Verstappen,0.7966666666666666,1.0,True
+Random Forest,138,2021,Lewis Hamilton,Valtteri Bottas,0.23333333333333334,5.0,False
+Random Forest,162,2022,George Russell,George Russell,0.3933333333333333,1.0,True
+Random Forest,183,2023,Max Verstappen,Max Verstappen,0.43666666666666665,1.0,True
