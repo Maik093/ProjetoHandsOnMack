@@ -530,12 +530,6 @@ Após a avaliação final, executar a interpretação do modelo para identificar
 python ml/modeling/interpret_model.py
 ```
 
-### 20. Executar as comparações adicionais
-
-As análises comparativas com Gabriel Bortoleto podem ser executadas após a conclusão da modelagem e interpretação dos resultados.
-
-Caso o script esteja na raiz do projeto:
-
 ```powershell
 python teste_stints.py
 ```
