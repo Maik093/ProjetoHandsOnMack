@@ -365,7 +365,7 @@ python pre_processamento/silver_driver_mapping.py
 
 Ao final dessa etapa, os dados tratados estarão disponíveis na camada Silver.
 
-7. Executar a análise exploratória (EDA)
+### 7. Executar a análise exploratória (EDA)
 
 O projeto possui um notebook de Análise Exploratória de Dados (EDA), responsável por analisar os dados disponibilizados na camada Silver.
 
@@ -414,6 +414,133 @@ Com o MinIO em execução e os dados disponíveis na camada Silver:
 streamlit run streamlit/app.py
 ```
 
+
+### 8. Construir a camada Gold
+
+Após a conclusão da Silver, executar o processo de construção da camada Gold.
+
+A documentação detalhada da modelagem da camada Gold está disponível em:
+
+```text
+gold/docs/MODELAGEM_GOLD.md
+```
+
+Executar:
+
+```powershell
+python gold/scripts/build_gold.py
+```
+
+### 9. Validar a camada Gold
+
+Após a construção das tabelas Gold, executar as validações:
+
+```powershell
+python gold/scripts/validate_gold.py
+pytest gold/tests -v
+```
+
+### 10. Construir o dataset de Machine Learning
+
+Após a conclusão e validação da Gold, executar a construção do dataset utilizado na etapa de Machine Learning.
+
+As documentações específicas de ML estão disponíveis na pasta:
+
+```text
+ml/docs/
+```
+
+Executar:
+
+```powershell
+python ml/feature_engineering/build_dataset_ml.py
+```
+
+### 11. Validar o dataset de Machine Learning
+
+Após a construção do dataset ML:
+
+```powershell
+python ml/feature_engineering/valida_dataset_ml.py
+```
+
+### 12. Executar a EDA do dataset de Machine Learning
+
+A EDA específica do dataset de ML deve ser executada antes da preparação dos dados para treinamento:
+
+```powershell
+python ml/feature_engineering/eda_dataset_ml.py
+```
+
+Essa etapa avalia a distribuição do target, associações entre as features, valores ausentes e possíveis redundâncias entre variáveis.
+
+### 13. Preparar os dados para modelagem
+
+Após a EDA do dataset ML:
+
+```powershell
+python ml/feature_engineering/prepare_model_data.py
+```
+
+### 14. Separar desenvolvimento e teste
+
+A separação dos dados é realizada por corrida, mantendo as corridas do conjunto de teste isoladas das corridas utilizadas no desenvolvimento:
+
+```powershell
+python ml/modeling/split_data.py
+```
+
+### 15. Treinar os modelos iniciais
+
+Executar o treinamento dos modelos utilizados na comparação inicial:
+
+```powershell
+python ml/modeling/train_models.py
+```
+
+### 16. Avaliar os modelos iniciais
+
+Após o treinamento:
+
+```powershell
+python ml/modeling/evaluate_initial.py
+```
+
+### 17. Realizar o tuning dos modelos
+
+Executar a etapa de otimização dos hiperparâmetros:
+
+```powershell
+python ml/modeling/tune_models.py
+```
+
+### 18. Avaliar o modelo final
+
+Após o tuning, realizar a avaliação final utilizando o conjunto de teste isolado:
+
+```powershell
+python ml/modeling/evaluate_final.py
+```
+
+### 19. Interpretar o modelo
+
+Após a avaliação final, executar a interpretação do modelo para identificar os principais fatores associados à vitória:
+
+```powershell
+python ml/modeling/interpret_model.py
+```
+
+### 20. Executar as comparações adicionais
+
+As análises comparativas com Gabriel Bortoleto podem ser executadas após a conclusão da modelagem e interpretação dos resultados.
+
+Caso o script esteja na raiz do projeto:
+
+```powershell
+python teste_stints.py
+```
+
+Essas análises possuem caráter descritivo e retrospectivo, sendo utilizadas para comparar as características de Gabriel Bortoleto com o histórico de vencedores em Interlagos. Elas não representam uma previsão determinística de vitória.
 
 
 
