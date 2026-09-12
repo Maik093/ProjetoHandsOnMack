@@ -1,0 +1,3 @@
+race_key,season,round,race_name,vencedor_real,score_vencedor_real,top1_modelo,score_top1_modelo,posicao_rank_vencedor_real,acertou_top1,acertou_top3,reciprocal_rank
+206,2024,21,Interlagos 2024,Max Verstappen,0.33500652533920233,Max Verstappen,0.33500652533920233,1,True,True,1.0
+230,2025,21,Interlagos 2025,Lando Norris,0.4260321030555201,Lando Norris,0.4260321030555201,1,True,True,1.0

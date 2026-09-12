@@ -15,9 +15,9 @@ Vinicius Lucas Trentino - RA: 10739016
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-A partir de uma base histórica de resultados da Fórmula 1, buscamos identificar quais características de desempenho, estratégia e contexto mais influenciam a probabilidade de uma equipe vencer o Grande Prêmio de Interlagos. 
+A partir de uma base histórica de resultados da Fórmula 1, buscamos identificar quais características de desempenho, estratégia e contexto estão mais associadas à vitória de um piloto no Grande Prêmio de São Paulo, em Interlagos.
 
-O objetivo é compreender, com base em dados, quais fatores diferenciam as equipes que tendem a obter resultados superiores nesse circuito específico.
+O objetivo é compreender, com base em dados, quais fatores historicamente diferenciam pilotos vencedores dos demais competidores e utilizar essas evidências para analisar a competitividade de Gabriel Bortoleto em diferentes cenários de corrida.
 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -522,6 +522,23 @@ Após o tuning, realizar a avaliação final utilizando o conjunto de teste isol
 python ml/modeling/evaluate_final.py
 ```
 
+A avaliação final utiliza exclusivamente as temporadas de 2024 e 2025 como conjunto de teste, preservando a separação temporal em relação ao desenvolvimento do modelo.
+
+Além das métricas tradicionais de classificação — Accuracy, Precision, Recall, F1-score e ROC-AUC — o projeto também avalia a capacidade do modelo de ordenar os pilotos dentro de cada corrida por meio das métricas Top-1, Top-3, posição média do vencedor e Mean Reciprocal Rank (MRR).
+
+No teste final, o Random Forest apresentou Accuracy de 95% e ROC-AUC de 1,0. Entretanto, com o threshold padrão de 0,5, nenhum dos dois vencedores foi classificado na classe positiva, resultando em Precision, Recall e F1-score iguais a zero.
+
+Esse resultado evidencia a importância de não interpretar a Accuracy isoladamente em um problema fortemente desbalanceado.
+
+Na perspectiva de ranking, o vencedor real ocupou a primeira posição do score do modelo nas duas corridas reservadas para teste:
+
+- 2024: Max Verstappen;
+- 2025: Lando Norris.
+
+Esse resultado corresponde a 2 acertos em 2 corridas de teste e deve ser interpretado com cautela devido ao tamanho reduzido da amostra. Não representa evidência de 100% de capacidade preditiva ou de generalização para novas corridas.
+
+O valor produzido por `predict_proba` é apresentado no projeto como `score_modelo_vitoria`. O score é utilizado para comparação e ordenação dos pilotos e não deve ser interpretado como probabilidade calibrada de vitória.
+
 ### 19. Interpretar o modelo
 
 Após a avaliação final, executar a interpretação do modelo para identificar os principais fatores associados à vitória:
@@ -534,9 +551,93 @@ python ml/modeling/interpret_model.py
 python teste_stints.py
 ```
 
-Essas análises possuem caráter descritivo e retrospectivo, sendo utilizadas para comparar as características de Gabriel Bortoleto com o histórico de vencedores em Interlagos. Elas não representam uma previsão determinística de vitória.
+### 20. Pipeline de inferência
 
+Após a avaliação final, o pipeline completo de Machine Learning é persistido para permitir sua reutilização sem necessidade de novo treinamento.
 
+Artefatos:
+
+```text
+ml/models/random_forest_interlagos.joblib
+ml/models/random_forest_interlagos_metadata.json
+```
+
+O arquivo `.joblib` contém a Pipeline completa do scikit-learn, incluindo pré-processamento e Random Forest treinado. Dessa forma, as mesmas transformações utilizadas no treinamento são reutilizadas durante a inferência.
+
+A metadata registra versão, features utilizadas, temporadas de desenvolvimento e teste, hiperparâmetros, métricas, ambiente e limitações conhecidas.
+
+A inferência em novos arquivos CSV ou Parquet pode ser executada por:
+
+```powershell
+python ml/inference/predict.py --input <arquivo_entrada> --output <arquivo_saida>
+```
+
+O pipeline realiza:
+
+1. carregamento do modelo e da metadata;
+2. validação das features de entrada;
+3. bloqueio de variáveis identificadas como risco de data leakage;
+4. aplicação do pipeline treinado;
+5. geração do `score_modelo_vitoria`;
+6. ranking dos pilotos dentro de cada corrida, quando as chaves necessárias estão disponíveis.
+
+A reprodutibilidade do artefato persistido foi validada utilizando os 40 registros do conjunto de teste. Os scores reproduzidos pelo pipeline de inferência foram equivalentes aos scores gerados na avaliação final, considerando tolerância numérica de ponto flutuante.
+
+### 21. Visualização da etapa de Machine Learning
+
+A aplicação Streamlit foi ampliada com duas páginas específicas para a etapa de Machine Learning.
+
+#### Machine Learning
+
+```text
+streamlit/pages/11_machine_learning.py
+```
+
+Apresenta:
+
+- estratégia de divisão temporal;
+- comparação dos modelos;
+- métricas finais de classificação;
+- matriz de confusão;
+- curva ROC;
+- avaliação por ranking;
+- resultados das corridas de teste;
+- importância das features;
+- limitações e interpretação do modelo.
+
+#### Gabriel Bortoleto
+
+```text
+streamlit/pages/12_bortoleto.py
+```
+
+Transforma os resultados históricos em uma análise direcionada ao problema de negócio, apresentando:
+
+- principais fatores associados à competitividade;
+- perfil histórico dos vencedores;
+- simulador exploratório de cenários;
+- indicador heurístico de competitividade;
+- recomendações estratégicas;
+- limitações da abordagem atual;
+- proposta de evolução para um modelo exclusivamente pré-corrida.
+
+O indicador apresentado no simulador é heurístico e não corresponde a uma probabilidade calibrada de vitória produzida pelo Random Forest.
+
+### Limitações e interpretação final
+
+As análises e a modelagem atual possuem caráter histórico, explicativo e exploratório.
+
+Embora o modelo utilize classificação binária para o target `vitoria`, seu resultado também é analisado como ranking dos pilotos dentro de cada corrida.
+
+Parte das principais features — como ritmo representativo, pit stops e características dos stints — somente é conhecida durante ou após a corrida. Portanto, o modelo atual não deve ser apresentado como um sistema de previsão pré-corrida.
+
+Além disso, o conjunto utilizado na modelagem possui apenas 7 corridas e 7 eventos positivos de vitória, enquanto o teste final contém somente 2 corridas. Os resultados devem, portanto, ser interpretados como evidências experimentais dentro do recorte estudado, e não como garantia de generalização.
+
+A importância das features representa associações aprendidas pelo modelo e não demonstra causalidade.
+
+Para Gabriel Bortoleto, os resultados são utilizados para comparar cenários e identificar prioridades historicamente associadas à competitividade em Interlagos.
+
+Uma evolução futura do projeto consiste na construção de um segundo modelo utilizando exclusivamente informações disponíveis antes da largada, permitindo investigar de forma metodologicamente adequada um cenário de previsão pré-corrida.
 
 
 

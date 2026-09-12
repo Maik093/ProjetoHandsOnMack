@@ -1,0 +1,41 @@
+pilot_race_key,race_key,driver_key,team_key,season,round,full_name,constructor_name,vitoria,y_pred,score_modelo_vitoria,modelo,rank_modelo,eh_top1,eh_top3
+174,206,31,10,2024,21,Lando Norris,McLaren,False,0,0.24553502673687513,Random Forest,2,False,True
+178,206,39,11,2024,21,George Russell,Mercedes,False,0,0.09038765299758972,Random Forest,6,False,False
+181,206,45,13,2024,21,Yuki Tsunoda,RB F1 Team,False,0,0.066206928751076,Random Forest,10,False,False
+175,206,32,3,2024,21,Esteban Ocon,Alpine F1 Team,False,0,0.10343350369427143,Random Forest,5,False,False
+171,206,23,13,2024,21,Liam Lawson,RB F1 Team,False,0,0.066206928751076,Random Forest,11,False,False
+172,206,24,5,2024,21,Charles Leclerc,Ferrari,False,0,0.06412359541774268,Random Forest,12,False,False
+163,206,1,18,2024,21,Alexander Albon,Williams,False,0,0.05717407144889179,Random Forest,16,False,False
+177,206,34,10,2024,21,Oscar Piastri,McLaren,False,0,0.06412359541774268,Random Forest,13,False,False
+164,206,2,4,2024,21,Fernando Alonso,Aston Martin,False,0,0.06412359541774268,Random Forest,14,False,False
+180,206,44,4,2024,21,Lance Stroll,Aston Martin,False,0,0.06050740478222512,Random Forest,15,False,False
+166,206,6,16,2024,21,Valtteri Bottas,Sauber,False,0,0.10478767036093808,Random Forest,3,False,True
+176,206,33,14,2024,21,Sergio Pérez,Red Bull,False,0,0.06954026208440935,Random Forest,7,False,False
+168,206,11,3,2024,21,Pierre Gasly,Alpine F1 Team,False,0,0.10478767036093808,Random Forest,4,False,False
+169,206,16,11,2024,21,Lewis Hamilton,Mercedes,False,0,0.067456928751076,Random Forest,8,False,False
+165,206,4,7,2024,21,Oliver Bearman,Haas F1 Team,False,0,0.067456928751076,Random Forest,9,False,False
+167,206,9,18,2024,21,Franco Colapinto,Williams,False,0,0.03825218948573561,Random Forest,17,False,False
+173,206,27,14,2024,21,Max Verstappen,Red Bull,True,0,0.33500652533920233,Random Forest,1,True,True
+170,206,17,7,2024,21,Nico Hülkenberg,Haas F1 Team,False,0,0.015622518820106608,Random Forest,20,False,False
+182,206,49,16,2024,21,Guanyu Zhou,Sauber,False,0,0.020721993294581083,Random Forest,18,False,False
+179,206,40,5,2024,21,Carlos Sainz,Ferrari,False,0,0.01836696326455105,Random Forest,19,False,False
+196,230,31,10,2025,21,Lando Norris,McLaren,True,0,0.4260321030555201,Random Forest,1,True,True
+185,230,3,11,2025,21,Andrea Kimi Antonelli,Mercedes,False,0,0.2142311583119924,Random Forest,3,False,True
+194,230,24,5,2025,21,Charles Leclerc,Ferrari,False,0,0.02632345750128008,Random Forest,18,False,False
+198,230,34,10,2025,21,Oscar Piastri,McLaren,False,0,0.08024504375017945,Random Forest,10,False,False
+190,230,15,13,2025,21,Isack Hadjar,RB F1 Team,False,0,0.0788706717582608,Random Forest,11,False,False
+199,230,39,11,2025,21,George Russell,Mercedes,False,0,0.14578162006506926,Random Forest,7,False,False
+193,230,23,13,2025,21,Liam Lawson,RB F1 Team,False,0,0.23474991711737397,Random Forest,2,False,True
+186,230,4,7,2025,21,Oliver Bearman,Haas F1 Team,False,0,0.0788706717582608,Random Forest,12,False,False
+189,230,11,3,2025,21,Pierre Gasly,Alpine F1 Team,False,0,0.0788706717582608,Random Forest,13,False,False
+192,230,17,16,2025,21,Nico Hülkenberg,Sauber,False,0,0.15390049479214218,Random Forest,4,False,False
+184,230,2,4,2025,21,Fernando Alonso,Aston Martin,False,0,0.07450567605042387,Random Forest,15,False,False
+183,230,1,18,2025,21,Alexander Albon,Williams,False,0,0.13855998635508807,Random Forest,8,False,False
+191,230,16,5,2025,21,Lewis Hamilton,Ferrari,False,0,0.001875,Random Forest,20,False,False
+201,230,44,4,2025,21,Lance Stroll,Aston Martin,False,0,0.150683129392137,Random Forest,5,False,False
+200,230,40,18,2025,21,Carlos Sainz,Williams,False,0,0.0788706717582608,Random Forest,14,False,False
+188,230,9,3,2025,21,Franco Colapinto,Alpine F1 Team,False,0,0.0634662515547206,Random Forest,17,False,False
+202,230,45,14,2025,21,Yuki Tsunoda,Red Bull,False,0,0.0806611289857716,Random Forest,9,False,False
+187,230,5,16,2025,21,Gabriel Bortoleto,Sauber,False,0,0.024075064520005074,Random Forest,19,False,False
+195,230,27,14,2025,21,Max Verstappen,Red Bull,False,0,0.14753355097652726,Random Forest,6,False,False
+197,230,32,7,2025,21,Esteban Ocon,Haas F1 Team,False,0,0.07450567605042387,Random Forest,16,False,False

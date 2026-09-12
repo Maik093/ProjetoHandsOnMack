@@ -1,0 +1,101 @@
+{
+    "model": {
+        "name": "random_forest_interlagos",
+        "version": "1.0.0",
+        "algorithm": "RandomForestClassifier",
+        "artifact": "random_forest_interlagos.joblib"
+    },
+    "objective": {
+        "target": "vitoria",
+        "problem_type": "binary_classification",
+        "analytical_use": "historical_explanatory_and_ranking",
+        "description": "Identificar características historicamente associadas à vitória de um piloto em Interlagos e ranquear pilotos dentro de cada corrida."
+    },
+    "features": {
+        "numeric": [
+            "grid",
+            "ritmo_representativo_pct",
+            "voltas_analisadas",
+            "voltas_disponiveis",
+            "cobertura_ritmo_pct",
+            "qtd_pit_stops",
+            "duracao_mediana_pit_convencional",
+            "qtd_stints",
+            "qtd_compostos_distintos",
+            "voltas_stint_medio",
+            "air_temp_media",
+            "track_temp_media",
+            "humidity_media",
+            "pressure_media",
+            "wind_speed_medio",
+            "rainfall_ocorreu"
+        ],
+        "categorical": [
+            "primeiro_composto",
+            "composto_mais_utilizado"
+        ],
+        "total": 18
+    },
+    "training": {
+        "development_seasons": [
+            2018,
+            2019,
+            2021,
+            2022,
+            2023
+        ],
+        "development_rows": 100,
+        "development_races": 5,
+        "development_wins": 5
+    },
+    "test": {
+        "test_seasons": [
+            2024,
+            2025
+        ],
+        "test_rows": 40,
+        "test_races": 2,
+        "test_wins": 2
+    },
+    "hyperparameters": {
+        "n_estimators": 300,
+        "max_depth": 3,
+        "min_samples_leaf": 1,
+        "class_weight": "balanced",
+        "random_state": 42,
+        "n_jobs": -1
+    },
+    "classification_metrics": {
+        "accuracy": 0.95,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "roc_auc": 1.0
+    },
+    "ranking_metrics": {
+        "top1_hits": 2,
+        "top1_accuracy": 1.0,
+        "top3_hits": 2,
+        "top3_accuracy": 1.0,
+        "mean_winner_rank": 1.0,
+        "mrr": 1.0
+    },
+    "interpretation": {
+        "classification_threshold": 0.5,
+        "score_name": "score_modelo_vitoria",
+        "score_is_calibrated_probability": false,
+        "warning": "O score do modelo não deve ser interpretado como probabilidade real calibrada de vitória."
+    },
+    "limitations": [
+        "O conjunto possui poucas corridas e poucos eventos positivos.",
+        "O teste final contém apenas as temporadas 2024 e 2025.",
+        "Parte das features é observada durante ou após a corrida.",
+        "O modelo atual não deve ser apresentado como previsão pré-corrida de vitória.",
+        "Feature importance representa associação dentro do modelo e não causalidade."
+    ],
+    "environment": {
+        "python_version": "3.14.0",
+        "sklearn_version": "1.9.1",
+        "created_at_utc": "2026-09-12T02:16:07.729698+00:00"
+    }
+}

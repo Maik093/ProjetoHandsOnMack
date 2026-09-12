@@ -1,0 +1,2 @@
+modelo,conjunto,temporadas,n_registros,n_corridas,n_vitorias,accuracy,precision,recall,f1,roc_auc,true_negative,false_positive,false_negative,true_positive
+Random Forest,test,2024-2025,40,2,2,0.95,0.0,0.0,0.0,1.0,38,0,2,0
