@@ -395,13 +395,15 @@ st.metric(
 
 
 st.caption(
-    """
-O indicador acima é uma regra heurística construída para
-apresentação e comparação de cenários.
-
-Ele não é a saída probabilística do Random Forest e não
-deve ser interpretado como chance percentual de vitória.
-"""
+    "Metodologia do indicador: os pesos utilizados — 45% para ritmo, "
+    "30% para posição de largada e 25% para pit stop — são aproximações "
+    "arredondadas da importância relativa das três principais features do "
+    "Random Forest quando consideradas entre si. As importâncias originais "
+    "foram aproximadamente 30,38% para ritmo, 19,39% para grid e 15,38% "
+    "para duração mediana do pit stop. O indicador é uma heurística para "
+    "comparação de cenários e não corresponde ao score_modelo_vitoria "
+    "produzido diretamente pelo Random Forest nem a uma probabilidade "
+    "calibrada de vitória."
 )
 
 

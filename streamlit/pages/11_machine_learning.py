@@ -316,6 +316,71 @@ vencedores.
 """
 )
 
+st.subheader("Custo computacional e interpretabilidade")
+
+st.markdown(
+    """
+Além das métricas preditivas, os modelos também foram comparados
+quanto ao custo computacional e à interpretabilidade.
+
+Os tempos abaixo foram medidos em benchmark local com:
+
+- 100 registros do conjunto de desenvolvimento;
+- 18 features;
+- 10 repetições por modelo;
+- mediana utilizada como medida principal.
+
+Os valores representam este ambiente de execução e podem variar
+de acordo com hardware, sistema operacional e carga da máquina.
+"""
+)
+
+benchmark_df = pd.DataFrame(
+    {
+        "Modelo": [
+            "Logistic Regression",
+            "Decision Tree",
+            "Random Forest",
+        ],
+        "Treino mediano (ms)": [
+            18.72,
+            10.58,
+            584.97,
+        ],
+        "Inferência mediana (ms)": [
+            5.92,
+            4.68,
+            68.72,
+        ],
+        "Interpretabilidade": [
+            "Alta",
+            "Alta",
+            "Média",
+        ],
+    }
+)
+
+st.dataframe(
+    benchmark_df,
+    use_container_width=True,
+    hide_index=True,
+)
+
+st.info(
+    """
+A Decision Tree apresentou o menor custo computacional,
+seguida pela Logistic Regression.
+
+O Random Forest apresentou custo superior devido à combinação
+de 300 árvores, mas o treinamento permaneceu abaixo de 1 segundo
+no dataset atual.
+
+Mesmo com maior custo e interpretabilidade relativa menor,
+o Random Forest foi mantido como modelo final por apresentar
+o melhor equilíbrio entre F1, Recall e ROC-AUC durante a etapa
+de desenvolvimento.
+"""
+)
 
 # ============================================================
 # 3. RESULTADO FINAL DE CLASSIFICAÇÃO
