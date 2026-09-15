@@ -75,6 +75,8 @@ st.markdown(
     - **Análises Combinadas** — visão conjunta dos fatores.
     - **Estatística** — correlações, ranking e análise de sensibilidade.
     - **Insights** — hipóteses, recomendações e limitações.
+    - **Machine Learning** — comparação de modelos, métricas finais, ranking e interpretação.
+    - **Gabriel Bortoleto** — cenários exploratórios, prioridades estratégicas e recomendações.
     """
 )
 
